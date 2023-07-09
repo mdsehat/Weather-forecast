@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/darker">
+
+    <!--City-->
+    <TextView
+        android:id="@+id/tvCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_16mdp"
+        android:background="@drawable/bg_rounded_white"
+        android:drawablePadding="@dimen/_5mdp"
+        android:padding="@dimen/_10mdp"
+        android:textColor="@color/whiteSmoke"
+        android:textSize="@dimen/_16font_mdp"
+        app:drawableStartCompat="@drawable/ic_location_on_24"
+        app:drawableTint="@color/whiteSmoke"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Tehran" />
+    <!--Today-->
+    <TextView
+        android:id="@+id/tvToday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_16mdp"
+        android:layout_marginTop="@dimen/_25mdp"
+        android:text="@string/today"
+        android:textColor="@color/whiteSmoke"
+        android:textSize="@dimen/_14font_mdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvCity" />
+    <!--7Day-->
+    <TextView
+        android:id="@+id/tv7day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_16mdp"
+        android:drawablePadding="@dimen/_3mdp"
+        android:gravity="center_vertical"
+        android:text="@string/_7_days"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/_11font_mdp"
+        app:drawableEndCompat="@drawable/arrow"
+        app:drawableTint="@color/gray"
+        app:layout_constraintBottom_toBottomOf="@id/tvToday"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvToday" />
+    <!--List 7 days-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv7days"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_14mdp"
+        android:clipToPadding="false"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/_16mdp"
+        android:paddingEnd="@dimen/_20mdp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvToday"
+        tools:listitem="@layout/item_7days" />
+    <!--Card main-->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardMain"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_170mdp"
+        android:layout_marginHorizontal="@dimen/_16mdp"
+        android:layout_marginTop="@dimen/_35mdp"
+        android:elevation="@dimen/_3mdp"
+        app:cardBackgroundColor="@color/dark"
+        app:cardCornerRadius="@dimen/_10mdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rv7days">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <!--Temperature-->
+            <TextView
+                android:id="@+id/tvTemp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16mdp"
+                android:textColor="@color/whiteSmoke"
+                android:textSize="@dimen/_52font_mdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/animForecast"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="18" />
+            <!--Anim-->
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animForecast"
+                android:layout_width="@dimen/_70mdp"
+                android:layout_height="@dimen/_70mdp"
+                app:layout_constraintBottom_toBottomOf="@id/tvTemp"
+                app:layout_constraintEnd_toStartOf="@+id/tvTemp"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvTemp"
+                app:lottie_autoPlay="true"
+                app:lottie_rawRes="@raw/sun"
+                app:lottie_speed="1.3" />
+            <!--More info-->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="@dimen/_3mdp"
+                android:layout_marginTop="@dimen/_5mdp"
+                app:cardBackgroundColor="@color/dark"
+                app:cardCornerRadius="@dimen/_8mdp"
+                app:layout_constraintEnd_toStartOf="@+id/cardView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/animForecast">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_10mdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/wind"
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/_7font_mdp"
+                        app:drawableTopCompat="@drawable/wind" />
+
+                    <TextView
+                        android:id="@+id/tvWind"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="15 Km/h"
+                        android:textColor="@color/whiteSmoke"
+                        android:textSize="@dimen/_10font_mdp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="@dimen/_3mdp"
+                app:cardBackgroundColor="@color/dark"
+                app:cardCornerRadius="@dimen/_8mdp"
+                android:layout_marginTop="@dimen/_5mdp"
+                app:layout_constraintEnd_toStartOf="@+id/cardView3"
+                app:layout_constraintStart_toEndOf="@+id/cardView2"
+                app:layout_constraintTop_toBottomOf="@id/animForecast">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_10mdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/humidity"
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/_7font_mdp"
+                        app:drawableTopCompat="@drawable/humidity" />
+
+                    <TextView
+                        android:id="@+id/tvHumidity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="24 %"
+                        android:textColor="@color/whiteSmoke"
+                        android:textSize="@dimen/_10font_mdp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="@dimen/_3mdp"
+                app:cardBackgroundColor="@color/dark"
+                app:cardCornerRadius="@dimen/_8mdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="@dimen/_5mdp"
+                app:layout_constraintStart_toEndOf="@+id/cardView"
+                app:layout_constraintTop_toBottomOf="@id/animForecast">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_10mdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/chance_of_rain"
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/_7font_mdp"
+                        app:drawableTopCompat="@drawable/chance_of_rain" />
+
+                    <TextView
+                        android:id="@+id/tvChanceRain"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="99 %"
+                        android:textColor="@color/whiteSmoke"
+                        android:textSize="@dimen/_10font_mdp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+    <!--Forecast hourly list-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvForecastHourly"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_35mdp"
+        android:clipToPadding="false"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/_16mdp"
+        android:paddingEnd="@dimen/_20mdp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cardMain"
+        tools:listitem="@layout/item_forecast_hourly" />
+</androidx.constraintlayout.widget.ConstraintLayout>

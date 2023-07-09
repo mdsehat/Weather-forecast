@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/_5mdp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/_3mdp"
+        app:cardBackgroundColor="@color/dark"
+        app:cardCornerRadius="@dimen/_15mdp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/_10mdp">
+
+            <TextView
+                android:id="@+id/tvTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="@dimen/_2mdp"
+                android:gravity="center"
+                android:text="10:00 AM"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/_6font_mdp"
+                app:drawableBottomCompat="@drawable/cloud_rain" />
+
+            <TextView
+                android:id="@+id/tvTemp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="18"
+                android:textColor="@color/whiteSmoke"
+                android:textSize="@dimen/_14font_mdp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>
