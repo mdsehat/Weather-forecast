@@ -1,23 +1,29 @@
 package com.example.weatherforecast.ui.home.adapter
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.weatherforecast.R
 import com.example.weatherforecast.databinding.HomeFragmentBinding
 import com.example.weatherforecast.databinding.Item7daysBinding
 import com.example.weatherforecast.utils.BaseDiffUtils
 import javax.inject.Inject
 
-class ListOfDaysAdapter @Inject constructor(): RecyclerView.Adapter<ListOfDaysAdapter.Holder>() {
+class ListOfDaysAdapter @Inject constructor() : RecyclerView.Adapter<ListOfDaysAdapter.Holder>() {
 
     //Binding
-    private lateinit var binding:Item7daysBinding
+    private lateinit var binding: Item7daysBinding
 
-    private var customList = mutableListOf<String>()
+    private var customList = emptyList<String>()
 
+    private lateinit var context:Context
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         binding = Item7daysBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        context = parent.context
         return Holder()
     }
 
@@ -31,21 +37,37 @@ class ListOfDaysAdapter @Inject constructor(): RecyclerView.Adapter<ListOfDaysAd
         return position
     }
 
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
-    }
-
-    fun setData(newList: MutableList<String>){
-        val diffInstance = BaseDiffUtils(customList, newList)
+    fun setData(newList: MutableList<String>) {
+        val diffInstance = BaseDiffUtils(customList.toMutableList(), newList)
         val calculate = DiffUtil.calculateDiff(diffInstance)
         customList = newList
         calculate.dispatchUpdatesTo(this)
     }
 
+    inner class Holder : RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("UseCompatLoadingForDrawables")
+        fun bind(item: String) {
+            binding.apply {
+                tvDate.text = item
+                tvDate.setOnClickListener { root ->
 
-    inner class Holder : RecyclerView.ViewHolder(binding.root){
-        fun bind(item:String){
-            binding.tvDate.text = item
+                    onClickItem?.let {
+                        it(item)
+                    }
+                }
+               /* if (selected == adapterPosition){
+                    tvDate.background = context.getDrawable(R.drawable.bg_rounded_magenta)
+                    tvDate.setTextColor(ContextCompat.getColor(context, R.color.white))
+                }else{
+                    tvDate.background = context.getDrawable(R.drawable.bg_rounded_white_alpha)
+                    tvDate.setTextColor(ContextCompat.getColor(context, R.color.gray))
+                }*/
+            }
         }
+    }
+    private var onClickItem: ((String) -> Unit)? = null
+
+    fun setOnClickItem(listener: (String) -> Unit) {
+        onClickItem = listener
     }
 }

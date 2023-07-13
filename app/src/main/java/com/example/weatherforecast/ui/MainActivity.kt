@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         //Bottom nav
         binding!!.btmNav.apply {
             setupWithNavController(navHostFragment.navController)
+            setOnNavigationItemReselectedListener {}
         }
         //Destination
         navHostFragment.navController.addOnDestinationChangedListener{_,destination,_ ->

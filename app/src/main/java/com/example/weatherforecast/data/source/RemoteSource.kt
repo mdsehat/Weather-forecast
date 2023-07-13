@@ -5,4 +5,5 @@ import javax.inject.Inject
 
 class RemoteSource @Inject constructor(private val api: ApiServices) {
     suspend fun getCurrent(lat:Double, lon: Double, appId: String) = api.getCurrent(lat, lon, appId)
+    suspend fun getForecast(lat:Double, lon: Double, appId: String) = api.getForecast(lat, lon, appId)
 }

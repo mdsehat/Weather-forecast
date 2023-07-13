@@ -2,7 +2,7 @@ package com.example.weatherforecast.utils
 
 import androidx.recyclerview.widget.DiffUtil
 
-data class BaseDiffUtils(val oldItem: MutableList<String>, val newItem: MutableList<String>) : DiffUtil.Callback() {
+data class BaseDiffUtils<T>(val oldItem: MutableList<T>, val newItem: MutableList<T>) : DiffUtil.Callback() {
     override fun getOldListSize(): Int {
         return oldItem.size
     }
