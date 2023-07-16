@@ -3,7 +3,7 @@ package com.example.weatherforecast.data.model
 
 import com.google.gson.annotations.SerializedName
 
-data class CurrentModel(
+data class CurrentResponse(
     @SerializedName("base")
     val base: String?, // stations
     @SerializedName("clouds")

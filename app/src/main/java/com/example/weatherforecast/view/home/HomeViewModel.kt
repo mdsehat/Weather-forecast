@@ -22,7 +22,6 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
         handlingIntent()
     }
 
-    private val TAG = "TAGFF"
     val intent = Channel<HomeIntent>()
     private val _state = MutableStateFlow<HomeState>(HomeState.Idle)
     val state: StateFlow<HomeState> get() = _state
@@ -41,13 +40,25 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
                         homeIntent.day
                     )
                 }
+                is HomeIntent.getCurrentWeather->{
+                    callCurrentWeather(homeIntent.lat, homeIntent.lon, homeIntent.appId)
+                }
             }
         }
     }
-
+    //Current
+    private fun callCurrentWeather(lat: Double, lon: Double, appId: String) = viewModelScope.launch {
+        _state.value = HomeState.ShowLoading
+        val response = repository.remote.getCurrent(lat, lon, appId)
+        if (response.isSuccessful){
+            _state.value = HomeState.ShowCurrentWeather(response.body()!!)
+        }else{
+            _state.value = handlingErrorCode(response)
+        }
+    }
+    //Forecast
     private fun callWeatherForecast(lat: Double, lon: Double, appId: String, day: Int) =
         viewModelScope.launch {
-            _state.value = HomeState.ShowLoading
             //Get response
             val response = repository.remote.getForecast(lat, lon, appId)
             //Setting of get time
@@ -59,12 +70,6 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
             val list: MutableList<ForecastResponse.Hours> = mutableListOf()
 
             if (response.isSuccessful) {
-                //Get general info of city
-                response.body()?.city?.let {
-                    _state.value = HomeState.ShowGeneralInfoOfCity(
-                        it.name!!, it.sunrise!!, it.sunset!!, it.timezone!!
-                    )
-                }
                 if (day == 0) {
                     response.body()?.list?.let {
                         val time = df.format(calender.time)
@@ -74,7 +79,7 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
                             }
                         }
                     }
-                    _state.value = HomeState.ShowWeatherForecast(list[0])
+                    _state.value = HomeState.ShowListWeatherForecast(list)
                 } else {
                     for (i in 1..day) {
                         calender.add(Calendar.DATE, 1)
@@ -87,13 +92,8 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
                             }
                         }
                     }
-                    /*for (i in 0 until list.size){
-                        if ((unixTime>list[i].dt!!) && (unixTime<list[i+1].dt!!)){
-                            break
-                        }
-                    }*/
-                    _state.value = HomeState.ShowWeatherForecast(list[4])
-
+                    _state.value = HomeState.ShowListWeatherForecast(list)
+                    _state.value = HomeState.ShowItemWeatherForecast(list[4])
                 }
             }else{
                 _state.value = handlingErrorCode(response)

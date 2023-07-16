@@ -20,7 +20,7 @@
             android:padding="@dimen/_10mdp">
 
             <TextView
-                android:id="@+id/tvTime"
+                android:id="@+id/tvTimeAndIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawablePadding="@dimen/_2mdp"

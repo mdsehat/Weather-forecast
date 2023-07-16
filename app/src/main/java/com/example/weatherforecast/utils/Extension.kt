@@ -10,3 +10,5 @@ fun RecyclerView.initRv(myAdapter : RecyclerView.Adapter<*>, myLayoutManager : R
         setHasFixedSize(true)
     }
 }
+
+fun convertTemp(tempK: Double) = tempK.toInt() - 273
