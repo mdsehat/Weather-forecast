@@ -4,13 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherforecast.R
 import com.example.weatherforecast.data.model.ForecastResponse
-import com.example.weatherforecast.databinding.HomeFragmentBinding
-import com.example.weatherforecast.databinding.Item7daysBinding
 import com.example.weatherforecast.databinding.ItemForecastHourlyBinding
 import com.example.weatherforecast.utils.BaseDiffUtils
 import com.example.weatherforecast.utils.IconCode

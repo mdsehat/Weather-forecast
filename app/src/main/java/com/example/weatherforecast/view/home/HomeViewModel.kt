@@ -29,20 +29,9 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
     private fun handlingIntent() = viewModelScope.launch {
         intent.consumeAsFlow().collect { homeIntent ->
             when (homeIntent) {
-                is HomeIntent.GetListOfDays -> {
-                    getListOfDays()
-                }
-                is HomeIntent.GetWeatherForecast -> {
-                    callWeatherForecast(
-                        homeIntent.lat,
-                        homeIntent.lon,
-                        homeIntent.appId,
-                        homeIntent.day
-                    )
-                }
-                is HomeIntent.getCurrentWeather->{
-                    callCurrentWeather(homeIntent.lat, homeIntent.lon, homeIntent.appId)
-                }
+                is HomeIntent.GetListOfDays -> { getListOfDays() }
+                is HomeIntent.GetWeatherForecast -> { callWeatherForecast(homeIntent.lat, homeIntent.lon, homeIntent.appId) }
+                is HomeIntent.GetCurrentWeather->{ callCurrentWeather(homeIntent.lat, homeIntent.lon, homeIntent.appId) }
             }
         }
     }
@@ -57,44 +46,11 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
         }
     }
     //Forecast
-    private fun callWeatherForecast(lat: Double, lon: Double, appId: String, day: Int) =
+    private fun callWeatherForecast(lat: Double, lon: Double, appId: String) =
         viewModelScope.launch {
-            //Get response
             val response = repository.remote.getForecast(lat, lon, appId)
-            //Setting of get time
-            val calender = Calendar.getInstance()
-            val df = SimpleDateFormat("YYYY-MM-dd", Locale.getDefault())
-            //Unix time
-            val unixTime = System.currentTimeMillis() / 1000L
-            //Create list for every day
-            val list: MutableList<ForecastResponse.Hours> = mutableListOf()
-
-            if (response.isSuccessful) {
-                if (day == 0) {
-                    response.body()?.list?.let {
-                        val time = df.format(calender.time)
-                        it.forEach { item ->
-                            if (item?.dtTxt?.contains(time)!!) {
-                                list.add(item)
-                            }
-                        }
-                    }
-                    _state.value = HomeState.ShowListWeatherForecast(list)
-                } else {
-                    for (i in 1..day) {
-                        calender.add(Calendar.DATE, 1)
-                    }
-                    response.body()?.list?.let {
-                        val time = df.format(calender.time)
-                        it.forEach { item ->
-                            if (item?.dtTxt?.contains(time)!!) {
-                                list.add(item)
-                            }
-                        }
-                    }
-                    _state.value = HomeState.ShowListWeatherForecast(list)
-                    _state.value = HomeState.ShowItemWeatherForecast(list[4])
-                }
+            if (response.isSuccessful){
+                _state.value = HomeState.ShoWeatherForecast(response.body()!!)
             }else{
                 _state.value = handlingErrorCode(response)
             }

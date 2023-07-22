@@ -24,6 +24,7 @@
         android:background="@drawable/bg_rounded_btm_nav"
         app:itemIconTint="@color/item_color_btm_nav"
         app:itemTextColor="@color/item_color_btm_nav"
+
         app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

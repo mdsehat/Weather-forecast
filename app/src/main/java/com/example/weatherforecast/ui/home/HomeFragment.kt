@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -22,8 +23,13 @@ import com.example.weatherforecast.utils.initRv
 import com.example.weatherforecast.view.home.HomeIntent
 import com.example.weatherforecast.view.home.HomeState
 import com.example.weatherforecast.view.home.HomeViewModel
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipDrawable
+import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -35,6 +41,8 @@ class HomeFragment : Fragment() {
     //Other
     private val viewModel: HomeViewModel by viewModels()
     private var myTimezone = 0
+    private val TAG = "tagDay"
+    private var counterChip = 1
 
     @Inject
     lateinit var daysAdapter: ListOfDaysAdapter
@@ -44,7 +52,6 @@ class HomeFragment : Fragment() {
 
     @Inject
     lateinit var iconCode: IconCode
-
 
 
     override fun onCreateView(
@@ -60,12 +67,12 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launchWhenCreated {
-            //Call current api
-            viewModel.intent.send(HomeIntent.getCurrentWeather(35.71, 51.40, API_KEY))
-            viewModel.intent.send(HomeIntent.GetWeatherForecast(35.71, 51.40, API_KEY, 0))
+            //Call api
+            viewModel.intent.send(HomeIntent.GetCurrentWeather(35.71, 51.40, API_KEY))
+            viewModel.intent.send(HomeIntent.GetWeatherForecast(35.71, 51.40, API_KEY))
             //Get list of days
             viewModel.intent.send(HomeIntent.GetListOfDays)
-            //Get data
+            //Load state
             viewModel.state.collect { state ->
                 when (state) {
                     is HomeState.ShowLoading -> {
@@ -75,13 +82,10 @@ class HomeFragment : Fragment() {
                         hideLoading()
                     }
                     is HomeState.ListOfDays -> {
-                        initRvListOfDays(state.list)
+                        initChipListOfDays(state.list)
                     }
-                    is HomeState.ShowListWeatherForecast -> {
-                        initViewOfForecastListByData(state.listForecast)
-                    }
-                    is HomeState.ShowItemWeatherForecast ->{
-                        initValueForecast(state.itemForecast)
+                    is HomeState.ShoWeatherForecast -> {
+                        initValueForecastList(state.itemForecast)
                     }
                     is HomeState.ShowCurrentWeather -> {
                         hideLoading()
@@ -113,16 +117,18 @@ class HomeFragment : Fragment() {
             //Anim icon
             val iconCode = iconCode.convertCodeToAnimationIcon(response.weather?.get(0)!!.id!!)
 
-            when(iconCode){
-                800->{
+            when (iconCode) {
+                800 -> {
                     if (response.weather!!.get(0)!!.icon!!.contains("d")) setupAnimate(R.raw.sun)
                     else setupAnimate(R.raw.moon)
                 }
-                801->{
+                801 -> {
                     if (response.weather!!.get(0)!!.icon!!.contains("d")) setupAnimate(R.raw.sun_behind_cloud)
                     else setupAnimate(R.raw.moon_behind_cloud)
                 }
-                else->{ setupAnimate(iconCode) }
+                else -> {
+                    setupAnimate(iconCode)
+                }
             }
             //Desc
             tvDesc.text = response.weather.get(0)!!.description
@@ -130,6 +136,7 @@ class HomeFragment : Fragment() {
             myTimezone = response.timezone!!
         }
     }
+
     //Forecast
     private fun initValueForecast(response: ForecastResponse.Hours) {
         //InitViews
@@ -145,47 +152,88 @@ class HomeFragment : Fragment() {
             //Anim icon
             val iconCode = iconCode.convertCodeToAnimationIcon(response.weather?.get(0)!!.id!!)
 
-            when(iconCode){
-                800->{
+            when (iconCode) {
+                800 -> {
                     if (response.sys?.pod!!.contains("d")) setupAnimate(R.raw.sun)
                     else setupAnimate(R.raw.moon)
                 }
-                801->{
+                801 -> {
                     if (response.sys?.pod!!.contains("d")) setupAnimate(R.raw.sun_behind_cloud)
                     else setupAnimate(R.raw.moon_behind_cloud)
                 }
-                else->{ setupAnimate(iconCode) }
+                else -> {
+                    setupAnimate(iconCode)
+                }
             }
             //Desc
             tvDesc.text = response.weather.get(0)!!.description
         }
     }
 
-    private fun initViewOfForecastListByData(items: MutableList<ForecastResponse.Hours>) {
-        //List
-        forecastAdapter.setData(items,myTimezone)
-        binding.rvForecastHourly.initRv(forecastAdapter, LinearLayoutManager(requireContext(),
-            LinearLayoutManager.HORIZONTAL, false))
+    private fun initValueForecastList(item: ForecastResponse) {
+        //Click
+        daysAdapter.setOnClickItem { day ->
+            //Setting of get time
+            val calender = Calendar.getInstance()
+            val df = SimpleDateFormat("YYYY-MM-dd", Locale.getDefault())
+            //List of forecast
+            var list: MutableList<ForecastResponse.Hours> = mutableListOf()
+            //Number of day
+            var numberOfDay = daysAdapter.customList.indexOf(day)
+
+            lifecycleScope.launch {
+                if (numberOfDay == 0) {
+                    val time = df.format(calender.time)
+                    item.list?.let {
+                        it.forEach { item ->
+                            if (item?.dtTxt?.contains(time)!!) {
+                                list.add(item)
+                            }
+                        }
+                    }
+                    //Fill value of current weather
+                    viewModel.intent.send(HomeIntent.GetCurrentWeather(35.71, 51.40, API_KEY))
+                } else {
+                    for (i in 1..numberOfDay) {
+                        calender.add(Calendar.DATE, 1)
+                    }
+                    val time = df.format(calender.time)
+                    item.list?.let {
+                        it.forEach { item ->
+                            if (item?.dtTxt?.contains(time)!!) {
+                                list.add(item)
+                            }
+                        }
+                    }
+                    //Fill value of main forecast
+                    initValueForecast(list[4])
+                }
+                //Fill list of adapter
+                forecastAdapter.setData(list, myTimezone)
+            }
+            //Init rv of forecast
+            binding.rvForecastHourly.initRv(forecastAdapter, LinearLayoutManager(requireContext(),
+                LinearLayoutManager.HORIZONTAL, false))
+        }
+
     }
 
     //List of days
-    private fun initRvListOfDays(list: MutableList<String>) {
-        daysAdapter.setData(list)
-        binding.rv7days.initRv(
-            daysAdapter,
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        )
-        //Click
-        daysAdapter.setOnClickItem { day ->
-            lifecycleScope.launch {
-                if (list.indexOf(day) == 0) {
-                    viewModel.intent.send(HomeIntent.getCurrentWeather(35.71, 51.40, API_KEY))
-                }
-                viewModel.intent.send(HomeIntent.GetWeatherForecast(35.71, 51.40, API_KEY, list.indexOf(day)))
-            }
+    private fun initChipListOfDays(list: MutableList<String>) {
+        setupChip(list, binding.chipGroup)
+    }
+    //Set up chip
+    private fun setupChip(list: MutableList<String>, view: ChipGroup){
+        list.forEach {
+            val chip = Chip(requireContext())
+            val chipDrawable = ChipDrawable.createFromAttributes(requireContext(), null, 0, R.style.chipStyle)
+            chip.setChipDrawable(chipDrawable)
+            chip.text = it
+            chip.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray))
+            chip.id = counterChip++
+            view.addView(chip)
         }
     }
-
     //Loading
     private fun showLoading() {
         binding.apply {

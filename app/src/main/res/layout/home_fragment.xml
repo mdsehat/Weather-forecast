@@ -14,7 +14,7 @@
             android:id="@+id/contentLay"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="invisible">
+            android:visibility="visible">
             <!--Desc-->
             <TextView
                 android:id="@+id/tvDesc"
@@ -54,9 +54,9 @@
                 android:textSize="@dimen/_14font_mdp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvCity" />
-            <!--7Day-->
+            <!--6Day-->
             <TextView
-                android:id="@+id/tv7day"
+                android:id="@+id/tv6day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_16mdp"
@@ -70,9 +70,9 @@
                 app:layout_constraintBottom_toBottomOf="@id/tvToday"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tvToday" />
-            <!--List 7 days-->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv7days"
+            <!--List 6 days-->
+            <!--<androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv6days"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_14mdp"
@@ -84,7 +84,27 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvToday"
-                tools:listitem="@layout/item_7days" />
+                tools:listitem="@layout/item_6days" />-->
+            <HorizontalScrollView
+                android:id="@+id/scroll6days"
+                android:layout_marginTop="@dimen/_14mdp"
+                android:clipToPadding="false"
+                android:scrollbars="none"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tvToday">
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/_16mdp"
+                    android:paddingEnd="@dimen/_20mdp"
+                    app:chipSpacing="0dp"
+
+                    app:selectionRequired="true"
+                    app:singleSelection="true"
+                    app:singleLine="true"/>
+            </HorizontalScrollView>
             <!--Card main-->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardMain"
@@ -97,7 +117,7 @@
                 app:cardCornerRadius="@dimen/_10mdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rv7days">
+                app:layout_constraintTop_toBottomOf="@id/scroll6days">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -265,9 +285,9 @@
     <!--Loading-->
     <ProgressBar
         android:id="@+id/loading"
-        android:layout_width="@dimen/_24mdp"
-        android:layout_height="@dimen/_24mdp"
-        android:indeterminateTint="@color/white"
+        android:layout_width="@dimen/_32mdp"
+        android:layout_height="@dimen/_32mdp"
+        android:indeterminateTint="@color/magentaHaze"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

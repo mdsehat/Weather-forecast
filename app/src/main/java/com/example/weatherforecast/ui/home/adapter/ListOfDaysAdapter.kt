@@ -4,25 +4,22 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weatherforecast.R
-import com.example.weatherforecast.databinding.HomeFragmentBinding
-import com.example.weatherforecast.databinding.Item7daysBinding
+import com.example.weatherforecast.databinding.Item6daysBinding
 import com.example.weatherforecast.utils.BaseDiffUtils
 import javax.inject.Inject
 
 class ListOfDaysAdapter @Inject constructor() : RecyclerView.Adapter<ListOfDaysAdapter.Holder>() {
 
     //Binding
-    private lateinit var binding: Item7daysBinding
+    private lateinit var binding: Item6daysBinding
 
-    private var customList = emptyList<String>()
+    var customList = emptyList<String>()
 
     private lateinit var context:Context
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        binding = Item7daysBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding = Item6daysBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         context = parent.context
         return Holder()
     }
