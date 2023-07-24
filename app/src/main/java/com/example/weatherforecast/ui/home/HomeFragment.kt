@@ -85,7 +85,7 @@ class HomeFragment : Fragment() {
                         initChipListOfDays(state.list)
                     }
                     is HomeState.ShoWeatherForecast -> {
-                        initValueForecastList(state.itemForecast)
+                        clickChip(state.itemForecast)
                     }
                     is HomeState.ShowCurrentWeather -> {
                         hideLoading()
@@ -169,7 +169,54 @@ class HomeFragment : Fragment() {
             tvDesc.text = response.weather.get(0)!!.description
         }
     }
-
+    private fun clickChip(item: ForecastResponse){
+        binding.chipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
+            var chip: Chip
+            checkedIds.forEach {
+                chip = group.findViewById(it)
+                //Setting of get time
+                val calender = Calendar.getInstance()
+                val df = SimpleDateFormat("YYYY-MM-dd", Locale.getDefault())
+                //List of forecast
+                var list: MutableList<ForecastResponse.Hours> = mutableListOf()
+                //Number of day
+                var numberOfDay = it
+                lifecycleScope.launch {
+                    if (numberOfDay == 1) {
+                        val time = df.format(calender.time)
+                        item.list?.let {listHour->
+                            listHour.forEach { item ->
+                                if (item?.dtTxt?.contains(time)!!) {
+                                    list.add(item)
+                                }
+                            }
+                        }
+                        //Fill value of current weather
+                        viewModel.intent.send(HomeIntent.GetCurrentWeather(35.71, 51.40, API_KEY))
+                    } else {
+                        for (i in 2..numberOfDay) {
+                            calender.add(Calendar.DATE, 1)
+                        }
+                        val time = df.format(calender.time)
+                        item.list?.let {listHour->
+                            listHour.forEach { item ->
+                                if (item?.dtTxt?.contains(time)!!) {
+                                    list.add(item)
+                                }
+                            }
+                        }
+                        //Fill value of main forecast
+                        initValueForecast(list[4])
+                    }
+                    //Fill list of adapter
+                    forecastAdapter.setData(list, item.city?.timezone!!)
+                }
+                //Init rv of forecast
+                binding.rvForecastHourly.initRv(forecastAdapter, LinearLayoutManager(requireContext(),
+                    LinearLayoutManager.HORIZONTAL, false))
+            }
+        }
+    }
     private fun initValueForecastList(item: ForecastResponse) {
         //Click
         daysAdapter.setOnClickItem { day ->

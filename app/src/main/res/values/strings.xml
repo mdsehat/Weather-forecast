@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Weather forecast</string>
     <string name="today">Today</string>
-    <string name="_7_days">7 days</string>
+    <string name="_5_days">5 days</string>
     <string name="wind">Wind</string>
     <string name="chance_of_rain">Chance of rain</string>
     <string name="humidity">Humidity</string>

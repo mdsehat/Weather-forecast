@@ -23,9 +23,10 @@
                 android:id="@+id/tvTimeAndIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawablePadding="@dimen/_2mdp"
+                android:drawablePadding="@dimen/_7mdp"
                 android:gravity="center"
                 android:text="10:00 AM"
+                android:layout_margin="@dimen/_3mdp"
                 android:textColor="@color/gray"
                 android:textSize="@dimen/_6font_mdp"
                 app:drawableBottomCompat="@drawable/cloud_rain" />
@@ -35,6 +36,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="18"
+                android:layout_margin="@dimen/_2mdp"
+                android:gravity="center"
                 android:textColor="@color/whiteSmoke"
                 android:textSize="@dimen/_14font_mdp" />
         </LinearLayout>

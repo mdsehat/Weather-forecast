@@ -2,6 +2,7 @@ package com.example.weatherforecast.ui.home.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -28,6 +29,7 @@ class ForecastWeatherAdapter @Inject constructor() : RecyclerView.Adapter<Foreca
     private var customList = emptyList<ForecastResponse.Hours>()
     private var myTimezone = 0
     private lateinit var context:Context
+    private val TAG = "tagHr"
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         binding = ItemForecastHourlyBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         context = parent.context
@@ -81,11 +83,13 @@ class ForecastWeatherAdapter @Inject constructor() : RecyclerView.Adapter<Foreca
                 //Temp
                 tvTemp.text = convertTemp(item.main!!.temp!!).toString()+"\u00B0"
                 //Time
-                val timezone = TimeZone.getDefault().getOffset(System.currentTimeMillis()) / 1000L
-                val dateOfCity = item.dt!!.toLong()
+               // val timezone = TimeZone.getDefault().getOffset(System.currentTimeMillis()) / 1000L
+                val dateOfCity = item.dt!!.toLong() * 1000L + myTimezone
                 val date = Date(dateOfCity)
-                val df = SimpleDateFormat("HH:mm a", Locale.getDefault())
+                val df = SimpleDateFormat("HH:mm ")
                 tvTimeAndIcon.text = df.format(date)
+                Log.i(TAG, "bind: " + item.dt!!.toLong() + "," + myTimezone + "," +
+                        "\n" + date.toString())
             }
         }
     }

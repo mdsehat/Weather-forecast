@@ -13,35 +13,32 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/contentLay"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:visibility="visible">
-            <!--Desc-->
-            <TextView
-                android:id="@+id/tvDesc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_16mdp"
-                android:textColor="@color/whiteAlpha"
-                app:layout_constraintBottom_toBottomOf="@id/tvCity"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tvCity"
-                tools:text="moderate rain!" />
             <!--City-->
             <TextView
                 android:id="@+id/tvCity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16mdp"
-                android:layout_marginEnd="@dimen/_16mdp"
-                android:background="@drawable/bg_rounded_white"
+                android:layout_marginTop="@dimen/_20mdp"
+                android:layout_marginStart="@dimen/_16mdp"
                 android:drawablePadding="@dimen/_5mdp"
-                android:padding="@dimen/_10mdp"
                 android:textColor="@color/whiteSmoke"
-                android:textSize="@dimen/_14font_mdp"
+                android:textSize="@dimen/_18font_mdp"
                 app:drawableTint="@color/whiteSmoke"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Tehran" />
+            <!--Last update-->
+            <TextView
+                android:id="@+id/tvDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/whiteAlpha"
+                android:textSize="@dimen/_10font_mdp"
+                app:layout_constraintStart_toStartOf="@id/tvCity"
+                app:layout_constraintTop_toBottomOf="@id/tvCity"
+                tools:text="Monday 24 July 21:06" />
             <!--Today-->
             <TextView
                 android:id="@+id/tvToday"
@@ -62,7 +59,7 @@
                 android:layout_marginEnd="@dimen/_16mdp"
                 android:drawablePadding="@dimen/_3mdp"
                 android:gravity="center_vertical"
-                android:text="@string/_7_days"
+                android:text="@string/_5_days"
                 android:textColor="@color/gray"
                 android:textSize="@dimen/_11font_mdp"
                 app:drawableEndCompat="@drawable/arrow"
@@ -70,21 +67,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/tvToday"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tvToday" />
-            <!--List 6 days-->
-            <!--<androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv6days"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_14mdp"
-                android:clipToPadding="false"
-                android:orientation="horizontal"
-                android:paddingStart="@dimen/_16mdp"
-                android:paddingEnd="@dimen/_20mdp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvToday"
-                tools:listitem="@layout/item_6days" />-->
+            <!--Chip 5 day-->
             <HorizontalScrollView
                 android:id="@+id/scroll6days"
                 android:layout_marginTop="@dimen/_14mdp"
@@ -147,14 +130,14 @@
                         app:lottie_autoPlay="true"
                         app:lottie_rawRes="@raw/sun"
                         app:lottie_speed="1.3" />
-                    <!--More info-->
+                    <!--Wind info-->
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cardView2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5mdp"
-                        android:elevation="@dimen/_3mdp"
-                        app:cardBackgroundColor="@color/dark"
+                        android:elevation="@dimen/_5mdp"
+                        app:cardBackgroundColor="@color/darker"
                         app:cardCornerRadius="@dimen/_8mdp"
                         app:layout_constraintEnd_toStartOf="@+id/cardView"
                         app:layout_constraintStart_toStartOf="parent"
@@ -185,14 +168,14 @@
                                 android:textSize="@dimen/_10font_mdp" />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
-
+                    <!--Humidity info-->
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cardView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5mdp"
-                        android:elevation="@dimen/_3mdp"
-                        app:cardBackgroundColor="@color/dark"
+                        android:elevation="@dimen/_5mdp"
+                        app:cardBackgroundColor="@color/darker"
                         app:cardCornerRadius="@dimen/_8mdp"
                         app:layout_constraintEnd_toStartOf="@+id/cardView3"
                         app:layout_constraintStart_toEndOf="@+id/cardView2"
@@ -223,14 +206,14 @@
                                 android:textSize="@dimen/_10font_mdp" />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
-
+                    <!--Feels like info-->
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cardView3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5mdp"
-                        android:elevation="@dimen/_3mdp"
-                        app:cardBackgroundColor="@color/dark"
+                        android:elevation="@dimen/_5mdp"
+                        app:cardBackgroundColor="@color/darker"
                         app:cardCornerRadius="@dimen/_8mdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/cardView"
