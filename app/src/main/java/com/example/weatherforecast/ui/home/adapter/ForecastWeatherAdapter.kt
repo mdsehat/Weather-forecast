@@ -13,6 +13,7 @@ import com.example.weatherforecast.databinding.ItemForecastHourlyBinding
 import com.example.weatherforecast.utils.BaseDiffUtils
 import com.example.weatherforecast.utils.IconCode
 import com.example.weatherforecast.utils.convertTemp
+import com.example.weatherforecast.utils.convertUnixToTime
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -83,13 +84,9 @@ class ForecastWeatherAdapter @Inject constructor() : RecyclerView.Adapter<Foreca
                 //Temp
                 tvTemp.text = convertTemp(item.main!!.temp!!).toString()+"\u00B0"
                 //Time
-               // val timezone = TimeZone.getDefault().getOffset(System.currentTimeMillis()) / 1000L
-                val dateOfCity = item.dt!!.toLong() * 1000L + myTimezone
-                val date = Date(dateOfCity)
                 val df = SimpleDateFormat("HH:mm ")
-                tvTimeAndIcon.text = df.format(date)
-                Log.i(TAG, "bind: " + item.dt!!.toLong() + "," + myTimezone + "," +
-                        "\n" + date.toString())
+                tvTimeAndIcon.text = convertUnixToTime(item.dt!!.toLong(), myTimezone, df)
+
             }
         }
     }

@@ -14,7 +14,7 @@
             android:id="@+id/contentLay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible">
+            android:visibility="invisible">
             <!--City-->
             <TextView
                 android:id="@+id/tvCity"

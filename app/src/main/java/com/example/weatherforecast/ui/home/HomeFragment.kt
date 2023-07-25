@@ -16,10 +16,7 @@ import com.example.weatherforecast.data.model.ForecastResponse
 import com.example.weatherforecast.databinding.HomeFragmentBinding
 import com.example.weatherforecast.ui.home.adapter.ForecastWeatherAdapter
 import com.example.weatherforecast.ui.home.adapter.ListOfDaysAdapter
-import com.example.weatherforecast.utils.API_KEY
-import com.example.weatherforecast.utils.IconCode
-import com.example.weatherforecast.utils.convertTemp
-import com.example.weatherforecast.utils.initRv
+import com.example.weatherforecast.utils.*
 import com.example.weatherforecast.view.home.HomeIntent
 import com.example.weatherforecast.view.home.HomeState
 import com.example.weatherforecast.view.home.HomeViewModel
@@ -85,11 +82,11 @@ class HomeFragment : Fragment() {
                         initChipListOfDays(state.list)
                     }
                     is HomeState.ShoWeatherForecast -> {
-                        clickChip(state.itemForecast)
+                        setupListForecastWithChip(state.itemForecast)
                     }
                     is HomeState.ShowCurrentWeather -> {
                         hideLoading()
-                        initValueCurrent(state.itemCurrent)
+                        setupMainCurrent(state.itemCurrent)
                     }
                     else -> {}
                 }
@@ -100,8 +97,8 @@ class HomeFragment : Fragment() {
 
     //--InitViews--//
     //Current
-    @SuppressLint("SetTextI18n")
-    private fun initValueCurrent(response: CurrentResponse) {
+    @SuppressLint("SetTextI18n", "SimpleDateFormat")
+    private fun setupMainCurrent(response: CurrentResponse) {
         //InitViews
         binding.apply {
             //Name
@@ -130,15 +127,64 @@ class HomeFragment : Fragment() {
                     setupAnimate(iconCode)
                 }
             }
-            //Desc
-            tvDesc.text = response.weather.get(0)!!.description
+            //Last updated
+            val df = SimpleDateFormat("EEE MM MMMM HH:mm")
+            tvDesc.text = convertUnixToTime(response.dt!!.toLong(), response.timezone!!, df)
             //timezone
-            myTimezone = response.timezone!!
+            myTimezone = response.timezone
         }
     }
 
-    //Forecast
-    private fun initValueForecast(response: ForecastResponse.Hours) {
+    //--Forecast
+    private fun initListForecast(id: Int, item: ForecastResponse){
+        //Setting of get time
+        val calender = Calendar.getInstance()
+        val df = SimpleDateFormat("YYYY-MM-dd", Locale.getDefault())
+        //List of forecast
+        var list: MutableList<ForecastResponse.Hours> = mutableListOf()
+        //Number of day
+        var numberOfDay = id
+        lifecycleScope.launch {
+            if (numberOfDay == 1) {
+                val time = df.format(calender.time)
+                item.list?.let { listHour ->
+                    listHour.forEach { item ->
+                        if (item?.dtTxt?.contains(time)!!) {
+                            list.add(item)
+                        }
+                    }
+                }
+                //Fill value of current weather
+                viewModel.intent.send(HomeIntent.GetCurrentWeather(35.71, 51.40, API_KEY))
+            } else {
+                for (i in 2..numberOfDay) {
+                    calender.add(Calendar.DATE, 1)
+                }
+                val time = df.format(calender.time)
+                item.list?.let { listHour ->
+                    listHour.forEach { item ->
+                        if (item?.dtTxt?.contains(time)!!) {
+                            list.add(item)
+                        }
+                    }
+                }
+                //Fill value of main forecast
+                setupMainForecast(list[4])
+            }
+            //Fill list of adapter
+            forecastAdapter.setData(list, item.city?.timezone!!)
+        }
+        //Init rv of forecast
+        binding.rvForecastHourly.initRv(
+            forecastAdapter, LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.HORIZONTAL, false
+            )
+        )
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setupMainForecast(response: ForecastResponse.Hours) {
         //InitViews
         binding.apply {
             //Wind
@@ -169,111 +215,30 @@ class HomeFragment : Fragment() {
             tvDesc.text = response.weather.get(0)!!.description
         }
     }
-    private fun clickChip(item: ForecastResponse){
+    private fun setupListForecastWithChip(item: ForecastResponse) {
+        //Default select
+        val id = 1;
+        binding.chipGroup.check(id)
+        initListForecast(id, item)
+        //Other select
         binding.chipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
-            var chip: Chip
             checkedIds.forEach {
-                chip = group.findViewById(it)
-                //Setting of get time
-                val calender = Calendar.getInstance()
-                val df = SimpleDateFormat("YYYY-MM-dd", Locale.getDefault())
-                //List of forecast
-                var list: MutableList<ForecastResponse.Hours> = mutableListOf()
-                //Number of day
-                var numberOfDay = it
-                lifecycleScope.launch {
-                    if (numberOfDay == 1) {
-                        val time = df.format(calender.time)
-                        item.list?.let {listHour->
-                            listHour.forEach { item ->
-                                if (item?.dtTxt?.contains(time)!!) {
-                                    list.add(item)
-                                }
-                            }
-                        }
-                        //Fill value of current weather
-                        viewModel.intent.send(HomeIntent.GetCurrentWeather(35.71, 51.40, API_KEY))
-                    } else {
-                        for (i in 2..numberOfDay) {
-                            calender.add(Calendar.DATE, 1)
-                        }
-                        val time = df.format(calender.time)
-                        item.list?.let {listHour->
-                            listHour.forEach { item ->
-                                if (item?.dtTxt?.contains(time)!!) {
-                                    list.add(item)
-                                }
-                            }
-                        }
-                        //Fill value of main forecast
-                        initValueForecast(list[4])
-                    }
-                    //Fill list of adapter
-                    forecastAdapter.setData(list, item.city?.timezone!!)
-                }
-                //Init rv of forecast
-                binding.rvForecastHourly.initRv(forecastAdapter, LinearLayoutManager(requireContext(),
-                    LinearLayoutManager.HORIZONTAL, false))
+                initListForecast(it, item)
             }
         }
-    }
-    private fun initValueForecastList(item: ForecastResponse) {
-        //Click
-        daysAdapter.setOnClickItem { day ->
-            //Setting of get time
-            val calender = Calendar.getInstance()
-            val df = SimpleDateFormat("YYYY-MM-dd", Locale.getDefault())
-            //List of forecast
-            var list: MutableList<ForecastResponse.Hours> = mutableListOf()
-            //Number of day
-            var numberOfDay = daysAdapter.customList.indexOf(day)
-
-            lifecycleScope.launch {
-                if (numberOfDay == 0) {
-                    val time = df.format(calender.time)
-                    item.list?.let {
-                        it.forEach { item ->
-                            if (item?.dtTxt?.contains(time)!!) {
-                                list.add(item)
-                            }
-                        }
-                    }
-                    //Fill value of current weather
-                    viewModel.intent.send(HomeIntent.GetCurrentWeather(35.71, 51.40, API_KEY))
-                } else {
-                    for (i in 1..numberOfDay) {
-                        calender.add(Calendar.DATE, 1)
-                    }
-                    val time = df.format(calender.time)
-                    item.list?.let {
-                        it.forEach { item ->
-                            if (item?.dtTxt?.contains(time)!!) {
-                                list.add(item)
-                            }
-                        }
-                    }
-                    //Fill value of main forecast
-                    initValueForecast(list[4])
-                }
-                //Fill list of adapter
-                forecastAdapter.setData(list, myTimezone)
-            }
-            //Init rv of forecast
-            binding.rvForecastHourly.initRv(forecastAdapter, LinearLayoutManager(requireContext(),
-                LinearLayoutManager.HORIZONTAL, false))
-        }
-
     }
 
     //List of days
     private fun initChipListOfDays(list: MutableList<String>) {
         setupChip(list, binding.chipGroup)
     }
+
     //Set up chip
-    private fun setupChip(list: MutableList<String>, view: ChipGroup){
+    private fun setupChip(list: MutableList<String>, view: ChipGroup) {
         list.forEach {
             val chip = Chip(requireContext())
-            val chipDrawable = ChipDrawable.createFromAttributes(requireContext(), null, 0, R.style.chipStyle)
+            val chipDrawable =
+                ChipDrawable.createFromAttributes(requireContext(), null, 0, R.style.chipStyle)
             chip.setChipDrawable(chipDrawable)
             chip.text = it
             chip.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray))
@@ -281,6 +246,7 @@ class HomeFragment : Fragment() {
             view.addView(chip)
         }
     }
+
     //Loading
     private fun showLoading() {
         binding.apply {
