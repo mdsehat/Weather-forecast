@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/_8mdp"
+    android:background="@color/darker">
+
+    <!--Day-->
+    <TextView
+        android:id="@+id/day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/whiteSmoke"
+        android:textSize="@dimen/_14font_mdp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Thursday" />
+
+    <!--Date-->
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/_12font_mdp"
+        app:layout_constraintStart_toStartOf="@id/day"
+        app:layout_constraintTop_toBottomOf="@id/day"
+        tools:text="7 Jun" />
+
+    <!--Temp feel-->
+    <TextView
+        android:id="@+id/tvTempFeel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/_13font_mdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="-5°" />
+
+    <!--Temp-->
+    <TextView
+        android:id="@+id/tvTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_5mdp"
+        android:textColor="@color/whiteSmoke"
+        android:textSize="@dimen/_14font_mdp"
+        app:layout_constraintBottom_toBottomOf="@id/tvTempFeel"
+        app:layout_constraintEnd_toStartOf="@id/tvTempFeel"
+        app:layout_constraintTop_toTopOf="@id/tvTempFeel"
+        tools:text="18°" />
+
+    <!--Icon-->
+    <TextView
+        android:id="@+id/tvIcon"
+        android:layout_width="@dimen/_26mdp"
+        android:layout_height="@dimen/_26mdp"
+        app:drawableStartCompat="@drawable/sun"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tvTemp"
+        app:layout_constraintStart_toEndOf="@id/day"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--  &lt;!&ndash;Line&ndash;&gt;
+      <View
+          android:layout_width="0dp"
+          android:layout_height="@dimen/_1mdp"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          android:background="@color/gray"/>-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

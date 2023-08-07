@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/darker">
+
+    <!--Tv city-->
+    <TextView
+        android:id="@+id/tvCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20mdp"
+        android:layout_marginStart="@dimen/_50mdp"
+        android:drawablePadding="@dimen/_5mdp"
+        android:textColor="@color/whiteSmoke"
+        android:textSize="@dimen/_18font_mdp"
+        app:drawableTint="@color/whiteSmoke"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Tehran" />
+
+    <!--Icon back-->
+    <ImageView
+        android:layout_width="@dimen/_18mdp"
+        android:layout_height="@dimen/_18mdp"
+        app:layout_constraintTop_toTopOf="@id/tvCity"
+        app:layout_constraintBottom_toBottomOf="@id/tvCity"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/arrow"
+        android:id="@+id/backIcon"
+        android:rotation="180"
+        android:layout_marginStart="@dimen/_16mdp"
+        app:tint="@color/americanSilver"/>
+
+    <!--Tv-->
+    <TextView
+        android:id="@+id/tvToday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_16mdp"
+        android:layout_marginTop="@dimen/_25mdp"
+        android:text="@string/today_and_4_next"
+        android:textColor="@color/whiteSmoke"
+        android:textSize="@dimen/_14font_mdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvCity" />
+
+    <!--Rv-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvToday"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/_15mdp"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/_16mdp"
+        android:paddingEnd="@dimen/_16mdp"
+        android:id="@+id/rv"
+        tools:listitem="@layout/item_forecast_5_day"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

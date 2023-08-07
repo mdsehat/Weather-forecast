@@ -9,7 +9,11 @@
         android:id="@+id/homeFragment"
         tools:layout="@layout/home_fragment"
         android:name="com.example.weatherforecast.ui.home.HomeFragment"
-        android:label="HomeFragment" />
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/actionHomeTo5Days"
+            app:destination="@id/forecast5DaysFragment" />
+    </fragment>
     <fragment
         android:id="@+id/splashFragment"
         tools:layout="@layout/splash_fragment"
@@ -22,5 +26,14 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/forecast5DaysFragment"
+        tools:layout="@layout/fragment_forecast5_days"
+        android:name="com.example.weatherforecast.ui.home.Forecast5DaysFragment"
+        android:label="Forecast5DaysFragment" >
+        <argument
+            android:name="item"
+            app:argType="com.example.weatherforecast.data.model.ForecastResponse" />
     </fragment>
 </navigation>

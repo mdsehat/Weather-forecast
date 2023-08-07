@@ -7,7 +7,7 @@ sealed class HomeState{
     object Idle: HomeState()
     object ShowLoading : HomeState()
     data class Error(val message: String): HomeState()
-    data class ListOfDays(val list: MutableList<String>): HomeState()
-    data class ShoWeatherForecast(val itemForecast: ForecastResponse):HomeState()
-    data class ShowCurrentWeather(val itemCurrent:CurrentResponse):HomeState()
+    data class ListOfDays(val listOfDays: MutableList<String>): HomeState()
+    data class ShowCurrentAndForecastWeather(val pairInfo: Pair<CurrentResponse, ForecastResponse>):HomeState()
+    data class Show5Days(val itemForecast5Days: ForecastResponse): HomeState()
 }

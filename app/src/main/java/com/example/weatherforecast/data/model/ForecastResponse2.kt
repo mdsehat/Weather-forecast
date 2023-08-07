@@ -5,8 +5,8 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
-@Parcelize
-data class ForecastResponse(
+
+data class ForecastResponse2(
     @SerializedName("city")
     val city: City?,
     @SerializedName("cnt")
@@ -17,8 +17,8 @@ data class ForecastResponse(
     val list: List<Hours?>?,
     @SerializedName("message")
     val message: Int? // 0
-) : Parcelable {
-    @Parcelize
+)  {
+
     data class City(
         @SerializedName("coord")
         val coord: Coord?,
@@ -36,16 +36,15 @@ data class ForecastResponse(
         val sunset: Int?, // 1689188399
         @SerializedName("timezone")
         val timezone: Int? // 7200
-    ) : Parcelable {
-        @Parcelize
+    ) {
         data class Coord(
             @SerializedName("lat")
             val lat: Double?, // 44.34
             @SerializedName("lon")
             val lon: Double? // 10.99
-        ) : Parcelable
+        )
     }
-    @Parcelize
+
     data class Hours(
         @SerializedName("clouds")
         val clouds: Clouds?,
@@ -67,13 +66,13 @@ data class ForecastResponse(
         val weather: List<Weather?>?,
         @SerializedName("wind")
         val wind: Wind?
-    ) : Parcelable {
-        @Parcelize
+    ){
+
         data class Clouds(
             @SerializedName("all")
             val all: Int? // 33
-        ) : Parcelable
-        @Parcelize
+        )
+
         data class Main(
             @SerializedName("feels_like")
             val feelsLike: Double?, // 298.23
@@ -93,18 +92,18 @@ data class ForecastResponse(
             val tempMax: Double?, // 299.89
             @SerializedName("temp_min")
             val tempMin: Double? // 298.09
-        ) : Parcelable
-        @Parcelize
+        )
+
         data class Rain(
             @SerializedName("3h")
             val h: Double? // 0.59
-        ) : Parcelable
-        @Parcelize
+        )
+
         data class Sys(
             @SerializedName("pod")
             val pod: String? // d
-        ) : Parcelable
-        @Parcelize
+        )
+
         data class Weather(
             @SerializedName("description")
             val description: String?, // scattered clouds
@@ -114,8 +113,7 @@ data class ForecastResponse(
             val id: Int?, // 802
             @SerializedName("main")
             val main: String? // Clouds
-        ) : Parcelable
-        @Parcelize
+        )
         data class Wind(
             @SerializedName("deg")
             val deg: Int?, // 303
@@ -123,6 +121,6 @@ data class ForecastResponse(
             val gust: Double?, // 2.77
             @SerializedName("speed")
             val speed: Double? // 0.23
-        ) : Parcelable
+        )
     }
 }

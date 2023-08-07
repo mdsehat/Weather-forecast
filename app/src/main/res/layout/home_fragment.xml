@@ -31,7 +31,7 @@
                 tools:text="Tehran" />
             <!--Last update-->
             <TextView
-                android:id="@+id/tvDesc"
+                android:id="@+id/tvLastUpdate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/whiteAlpha"
@@ -39,21 +39,9 @@
                 app:layout_constraintStart_toStartOf="@id/tvCity"
                 app:layout_constraintTop_toBottomOf="@id/tvCity"
                 tools:text="Monday 24 July 21:06" />
-            <!--Today-->
+            <!--5Day-->
             <TextView
-                android:id="@+id/tvToday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_16mdp"
-                android:layout_marginTop="@dimen/_25mdp"
-                android:text="@string/today"
-                android:textColor="@color/whiteSmoke"
-                android:textSize="@dimen/_14font_mdp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvCity" />
-            <!--6Day-->
-            <TextView
-                android:id="@+id/tv6day"
+                android:id="@+id/tv5day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_16mdp"
@@ -64,9 +52,9 @@
                 android:textSize="@dimen/_11font_mdp"
                 app:drawableEndCompat="@drawable/arrow"
                 app:drawableTint="@color/gray"
-                app:layout_constraintBottom_toBottomOf="@id/tvToday"
+                android:layout_marginTop="@dimen/_10mdp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tvToday" />
+                app:layout_constraintTop_toBottomOf="@id/tvLastUpdate" />
             <!--Chip 5 day-->
             <HorizontalScrollView
                 android:id="@+id/scroll6days"
@@ -75,7 +63,7 @@
                 android:scrollbars="none"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/tvToday">
+                app:layout_constraintTop_toBottomOf="@id/tv5day">
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/chipGroup"
                     android:layout_width="wrap_content"
@@ -83,7 +71,6 @@
                     android:paddingStart="@dimen/_16mdp"
                     android:paddingEnd="@dimen/_20mdp"
                     app:chipSpacing="0dp"
-
                     app:selectionRequired="true"
                     app:singleSelection="true"
                     app:singleLine="true"/>
@@ -111,7 +98,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_16mdp"
-                        android:text="18"
+                        tools:text="18"
                         android:textColor="@color/whiteSmoke"
                         android:textSize="@dimen/_52font_mdp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -128,8 +115,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@id/tvTemp"
                         app:lottie_autoPlay="true"
-                        app:lottie_rawRes="@raw/sun"
-                        app:lottie_speed="1.3" />
+                        app:lottie_speed="0.8" />
                     <!--Wind info-->
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cardView2"
@@ -154,7 +140,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="@string/wind"
+                                tools:text="@string/wind"
                                 android:textColor="@color/gray"
                                 android:textSize="@dimen/_7font_mdp"
                                 app:drawableTopCompat="@drawable/wind" />
@@ -163,7 +149,7 @@
                                 android:id="@+id/tvWind"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="15 Km/h"
+                                tools:text="15 Km/h"
                                 android:textColor="@color/whiteSmoke"
                                 android:textSize="@dimen/_10font_mdp" />
                         </LinearLayout>
@@ -192,7 +178,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="@string/humidity"
+                                tools:text="@string/humidity"
                                 android:textColor="@color/gray"
                                 android:textSize="@dimen/_7font_mdp"
                                 app:drawableTopCompat="@drawable/humidity" />
@@ -201,7 +187,7 @@
                                 android:id="@+id/tvHumidity"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="24 %"
+                                tools:text="24 %"
                                 android:textColor="@color/whiteSmoke"
                                 android:textSize="@dimen/_10font_mdp" />
                         </LinearLayout>
@@ -230,7 +216,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="@string/feels_like"
+                                tools:text="@string/feels_like"
                                 android:textColor="@color/gray"
                                 android:textSize="@dimen/_7font_mdp"
                                 app:drawableTopCompat="@drawable/feels_like" />
@@ -239,7 +225,7 @@
                                 android:id="@+id/tvFeelsLike"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="99 "
+                                tools:text="99 "
                                 android:textColor="@color/whiteSmoke"
                                 android:textSize="@dimen/_10font_mdp" />
                         </LinearLayout>

@@ -1,14 +1,14 @@
 package com.example.weatherforecast.view.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.weatherforecast.data.model.CurrentResponse
 import com.example.weatherforecast.data.model.ForecastResponse
 import com.example.weatherforecast.data.repository.HomeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.text.SimpleDateFormat
@@ -29,31 +29,39 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
     private fun handlingIntent() = viewModelScope.launch {
         intent.consumeAsFlow().collect { homeIntent ->
             when (homeIntent) {
-                is HomeIntent.GetListOfDays -> { getListOfDays() }
-                is HomeIntent.GetWeatherForecast -> { callWeatherForecast(homeIntent.lat, homeIntent.lon, homeIntent.appId) }
-                is HomeIntent.GetCurrentWeather->{ callCurrentWeather(homeIntent.lat, homeIntent.lon, homeIntent.appId) }
+                is HomeIntent.GetListOfDays -> {
+                    getListOfDays()
+                }
+                is HomeIntent.GetCurrentAndForecastWeather -> {
+                    callCurrentAndForecastWeather(homeIntent.lat, homeIntent.lon, homeIntent.appId)
+                }
             }
         }
     }
+
     //Current
-    private fun callCurrentWeather(lat: Double, lon: Double, appId: String) = viewModelScope.launch {
-        _state.value = HomeState.ShowLoading
-        val response = repository.remote.getCurrent(lat, lon, appId)
-        if (response.isSuccessful){
-            _state.value = HomeState.ShowCurrentWeather(response.body()!!)
-        }else{
-            _state.value = handlingErrorCode(response)
-        }
-    }
-    //Forecast
-    private fun callWeatherForecast(lat: Double, lon: Double, appId: String) =
+    private fun callCurrentAndForecastWeather(lat: Double, lon: Double, appId: String) =
         viewModelScope.launch {
-            val response = repository.remote.getForecast(lat, lon, appId)
-            if (response.isSuccessful){
-                _state.value = HomeState.ShoWeatherForecast(response.body()!!)
-            }else{
-                _state.value = handlingErrorCode(response)
+            Log.i("tagview", "callCurrentAndForecastWeather: ")
+            _state.value = HomeState.ShowLoading
+            //Combine 2 api
+            val currentResponse = repository.remote.getCurrent(lat, lon, appId)
+            val forecastResponse = repository.remote.getForecast(lat, lon, appId)
+            combine(currentResponse, forecastResponse) { current: Response<CurrentResponse>,
+                                                         forecast: Response<ForecastResponse> ->
+                return@combine Pair(current,forecast)
+            }.catch {
+                _state.value = HomeState.Error(it.message!!)
             }
+                .collect {
+                    if (it.first.isSuccessful) {
+                        _state.value = HomeState.ShowCurrentAndForecastWeather(
+                            Pair(it.first.body()!!, it.second.body()!!)
+                        )
+                    } else {
+                        _state.value = handlingErrorCode(it.first)
+                    }
+                }
         }
 
     //List of days
@@ -68,13 +76,22 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
         }
         _state.value = HomeState.ListOfDays(listDays)
     }
+
     //Handling error code
-    private fun <T>handlingErrorCode(response:Response<T>): HomeState{
-        return when(response.code()){
-            401->{HomeState.Error("Invalid your API key.")}
-            404->{HomeState.Error("You are searching wrong city.")}
-            429->{HomeState.Error("You called more than 60 API in per minute")}
-            else->{HomeState.Error(response.message())}
+    private fun <T> handlingErrorCode(response: Response<T>): HomeState {
+        return when (response.code()) {
+            401 -> {
+                HomeState.Error("Invalid your API key.")
+            }
+            404 -> {
+                HomeState.Error("You are searching wrong city.")
+            }
+            429 -> {
+                HomeState.Error("You called more than 60 API in per minute")
+            }
+            else -> {
+                HomeState.Error(response.message())
+            }
         }
     }
 }

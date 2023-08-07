@@ -8,4 +8,7 @@
     <string name="home">Home</string>
     <string name="search">Search</string>
     <string name="feels_like">Feels like</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="today_and_4_next">Today and next 4 days</string>
 </resources>
