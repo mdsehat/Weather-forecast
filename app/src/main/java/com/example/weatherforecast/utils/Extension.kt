@@ -1,5 +1,9 @@
 package com.example.weatherforecast.utils
 
+import android.app.Activity
+import android.widget.EditText
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.text.SimpleDateFormat
@@ -20,4 +24,11 @@ fun convertUnixToTime(time: Long, timezone: Int, dataFormat: SimpleDateFormat): 
     val date = Date(dateOfCity)
     dataFormat.timeZone = TimeZone.getTimeZone("GMT")
     return dataFormat.format(date)
+}
+
+fun EditText.showKeyboard(activity: Activity){
+    requestFocus()
+    post {
+        WindowCompat.getInsetsController(activity.window, this).show(WindowInsetsCompat.Type.ime())
+    }
 }

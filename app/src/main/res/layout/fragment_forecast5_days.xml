@@ -42,8 +42,8 @@
         android:layout_marginStart="@dimen/_16mdp"
         android:layout_marginTop="@dimen/_25mdp"
         android:text="@string/today_and_4_next"
-        android:textColor="@color/whiteSmoke"
-        android:textSize="@dimen/_14font_mdp"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/_12font_mdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvCity" />
 

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherforecast.R
@@ -33,7 +34,6 @@ class Forecast5DaysFragment : Fragment() {
 
     //Other
     private val args by navArgs<Forecast5DaysFragmentArgs>()
-    private val TAG = "tag5"
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -49,8 +49,13 @@ class Forecast5DaysFragment : Fragment() {
         binding.apply {
             //Get data
             val item = args.item
+            tvCity.text = item.city?.name
             initList(item)
             rv.initRv(forecastAdapter, LinearLayoutManager(requireContext()))
+            //Icon back
+            backIcon.setOnClickListener {
+                findNavController().popBackStack(R.id.forecast5DaysFragment, true)
+            }
         }
     }
 
@@ -78,9 +83,6 @@ class Forecast5DaysFragment : Fragment() {
                 }
             }
             list.add(internalList[counter/2])
-        }
-        for (i in 0 until list.size){
-            Log.i(TAG, "initList: " + list[i].dtTxt)
         }
         forecastAdapter.setData(list, item.city?.timezone!!)
     }

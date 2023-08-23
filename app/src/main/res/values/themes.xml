@@ -16,7 +16,7 @@
     </style>
     <style name="chipStyle" parent="Widget.MaterialComponents.Chip.Choice">
         <item name="chipBackgroundColor">@color/chip_color</item>
-        <item name="chipCornerRadius">@dimen/_14mdp</item>
-        <item name="android:textSize">@dimen/_9font_mdp</item>
+        <item name="chipCornerRadius">@dimen/_10mdp</item>
+        <item name="android:textSize">@dimen/_11font_mdp</item>
     </style>
 </resources>

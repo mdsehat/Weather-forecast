@@ -2,12 +2,14 @@ package com.example.weatherforecast.ui.home
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -26,6 +28,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -40,7 +43,7 @@ class HomeFragment : Fragment() {
     //Other
     private val viewModel: HomeViewModel by viewModels()
     private var myTimezone = 0
-    private var counterChip = 1
+    private val daysList = mutableListOf<String>()
     private val TAG = "tagHome"
 
     @Inject
@@ -52,6 +55,12 @@ class HomeFragment : Fragment() {
     @Inject
     lateinit var iconCode: IconCode
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        lifecycleScope.launch {
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,7 +74,7 @@ class HomeFragment : Fragment() {
     @Suppress("DEPRECATION")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        lifecycleScope.launchWhenCreated {
+        lifecycleScope.launch {
             //Call api
             viewModel.intent.send(HomeIntent.GetCurrentAndForecastWeather(35.71, 51.40, API_KEY))
             //Get list of days
@@ -86,9 +95,7 @@ class HomeFragment : Fragment() {
                     is HomeState.ShowCurrentAndForecastWeather -> {
                         hideLoading()
                         setupData(state.pairInfo)
-                    }
-                    is HomeState.Show5Days->{
-                        showForecast5Days(state.itemForecast5Days)
+                        showForecast5Days(state.pairInfo.second)
                     }
                     else -> {}
                 }
@@ -97,17 +104,28 @@ class HomeFragment : Fragment() {
         }
     }
 
+
+
+    //--InitViews--//
     private fun setupData(item: Pair<CurrentResponse, ForecastResponse>) {
-        //Default select
-        val numberOfDay = 1;
-        binding.chipGroup.check(numberOfDay)
-        initListForecast(numberOfDay, itemCurrent = item.first, itemForecast = item.second)
-        //Other select
-        binding.chipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
-            checkedIds.forEach {
-                initListForecast(it, itemCurrent = item.first, itemForecast = item.second)
+        binding.apply {
+            //Default select
+            val numberOfDay = 1;
+            firstDay.isChecked = true
+            initListForecast(numberOfDay, itemCurrent = item.first, itemForecast = item.second)
+            //Other select
+            firstDay.setOnClickListener {
+                initListForecast(1, itemCurrent = item.first, itemForecast = item.second)
+            }
+            secondDay.setOnClickListener {
+                initListForecast(2, itemCurrent = item.first, itemForecast = item.second)
+            }
+            thirdDay.setOnClickListener {
+                initListForecast(3, itemCurrent = item.first, itemForecast = item.second)
             }
         }
+
+
     }
 
     private fun showForecast5Days(itemForecast5Days: ForecastResponse) {
@@ -117,7 +135,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-    //--InitViews--//
     //Current
     @SuppressLint("SetTextI18n", "SimpleDateFormat")
     private fun setupMainCurrent(response: CurrentResponse) {
@@ -159,7 +176,11 @@ class HomeFragment : Fragment() {
 
     //--Forecast
     @SuppressLint("WeekBasedYear")
-    private fun initListForecast(numberOfDay: Int, itemForecast: ForecastResponse, itemCurrent: CurrentResponse){
+    private fun initListForecast(
+        numberOfDay: Int,
+        itemForecast: ForecastResponse,
+        itemCurrent: CurrentResponse
+    ) {
         //Setting of get time
         val calender = Calendar.getInstance()
         val df = SimpleDateFormat("YYYY-MM-dd", Locale.getDefault())
@@ -171,7 +192,11 @@ class HomeFragment : Fragment() {
                 val time = df.format(calender.time)
                 itemForecast.list?.let { listHour ->
                     listHour.forEach { items ->
-                        val requestTime = convertUnixToTime(items!!.dt!!.toLong(), itemForecast.city?.timezone!!, df)
+                        val requestTime = convertUnixToTime(
+                            items!!.dt!!.toLong(),
+                            itemForecast.city?.timezone!!,
+                            df
+                        )
                         if (requestTime.contains(time)) {
                             list.add(items)
                         }
@@ -186,7 +211,11 @@ class HomeFragment : Fragment() {
                 val time = df.format(calender.time)
                 itemForecast.list?.let { listHour ->
                     listHour.forEach { items ->
-                        val requestTime = convertUnixToTime(items!!.dt!!.toLong(), itemForecast.city?.timezone!!, df)
+                        val requestTime = convertUnixToTime(
+                            items!!.dt!!.toLong(),
+                            itemForecast.city?.timezone!!,
+                            df
+                        )
                         if (requestTime.contains(time)) {
                             list.add(items)
                         }
@@ -240,20 +269,10 @@ class HomeFragment : Fragment() {
 
     //List of days
     private fun initChipListOfDays(list: MutableList<String>) {
-        setupChip(list, binding.chipGroup)
-    }
-
-    //Set up chip
-    private fun setupChip(list: MutableList<String>, view: ChipGroup) {
-        list.forEach {
-            val chip = Chip(requireContext())
-            val chipDrawable =
-                ChipDrawable.createFromAttributes(requireContext(), null, 0, R.style.chipStyle)
-            chip.setChipDrawable(chipDrawable)
-            chip.text = it
-            chip.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray))
-            chip.id = counterChip++
-            view.addView(chip)
+        binding.apply {
+            firstDay.text = list[0]
+            secondDay.text = list[1]
+            thirdDay.text = list[2]
         }
     }
 

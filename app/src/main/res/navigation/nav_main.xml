@@ -12,7 +12,11 @@
         android:label="HomeFragment" >
         <action
             android:id="@+id/actionHomeTo5Days"
-            app:destination="@id/forecast5DaysFragment" />
+            app:destination="@id/forecast5DaysFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
@@ -36,4 +40,9 @@
             android:name="item"
             app:argType="com.example.weatherforecast.data.model.ForecastResponse" />
     </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.weatherforecast.ui.search.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
 </navigation>

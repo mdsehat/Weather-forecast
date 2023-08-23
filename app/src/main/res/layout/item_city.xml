@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/_10mdp"
+    android:paddingHorizontal="@dimen/_10mdp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/darker">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Tehran"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_16font_mdp"
+        android:id="@+id/tvCity"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tvCity"
+        app:layout_constraintStart_toStartOf="@id/tvCity"
+        tools:text="IR"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/_10font_mdp"
+        android:id="@+id/tvCountry"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray"
+        android:alpha="0.3"
+        app:layout_constraintTop_toBottomOf="@id/tvCountry"
+        android:layout_marginTop="@dimen/_10mdp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -88,6 +88,9 @@ class Forecast5DaysAdapter @Inject constructor() : RecyclerView.Adapter<Forecast
                 //Time
                 val df = SimpleDateFormat("dd MMM")
                 tvDate.text = convertUnixToTime(item.dt!!.toLong(), myTimezone, df)
+                //Day
+                val dfDay = SimpleDateFormat("EEEE")
+                day.text = convertUnixToTime(item.dt!!.toLong(), myTimezone, dfDay)
 
             }
         }

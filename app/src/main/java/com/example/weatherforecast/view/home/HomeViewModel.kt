@@ -8,6 +8,7 @@ import com.example.weatherforecast.data.model.ForecastResponse
 import com.example.weatherforecast.data.repository.HomeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import retrofit2.Response
@@ -39,10 +40,9 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
         }
     }
 
-    //Current
+    //Current and forecast
     private fun callCurrentAndForecastWeather(lat: Double, lon: Double, appId: String) =
         viewModelScope.launch {
-            Log.i("tagview", "callCurrentAndForecastWeather: ")
             _state.value = HomeState.ShowLoading
             //Combine 2 api
             val currentResponse = repository.remote.getCurrent(lat, lon, appId)
@@ -65,16 +65,18 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
         }
 
     //List of days
-    private fun getListOfDays() {
+    private fun getListOfDays() = viewModelScope.launch {
         val listDays: MutableList<String> = mutableListOf()
         val df = SimpleDateFormat("EEE, d MMM", Locale.getDefault())
         val calenderCurrent = Calendar.getInstance()
         listDays.add(df.format(calenderCurrent.time))
-        for (i in 1..4) {
+        for (i in 1..2) {
             calenderCurrent.add(Calendar.DATE, 1)
             listDays.add(df.format(calenderCurrent.time))
         }
+
         _state.value = HomeState.ListOfDays(listDays)
+
     }
 
     //Handling error code

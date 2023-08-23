@@ -9,5 +9,4 @@ sealed class HomeState{
     data class Error(val message: String): HomeState()
     data class ListOfDays(val listOfDays: MutableList<String>): HomeState()
     data class ShowCurrentAndForecastWeather(val pairInfo: Pair<CurrentResponse, ForecastResponse>):HomeState()
-    data class Show5Days(val itemForecast5Days: ForecastResponse): HomeState()
 }

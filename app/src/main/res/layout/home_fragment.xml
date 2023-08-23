@@ -14,7 +14,7 @@
             android:id="@+id/contentLay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="invisible">
+            android:visibility="visible">
             <!--City-->
             <TextView
                 android:id="@+id/tvCity"
@@ -64,6 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/tv5day">
+
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/chipGroup"
                     android:layout_width="wrap_content"
@@ -73,7 +74,39 @@
                     app:chipSpacing="0dp"
                     app:selectionRequired="true"
                     app:singleSelection="true"
-                    app:singleLine="true"/>
+                    app:singleLine="true">
+
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/chipStyle"
+                        android:id="@+id/firstDay"
+                        android:layout_marginHorizontal="@dimen/_5mdp"
+                        android:padding="@dimen/_3mdp"
+                        android:textColor="@color/gray"
+                        tools:text="sun, 14 jul"/>
+
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/chipStyle"
+                        android:layout_marginHorizontal="@dimen/_5mdp"
+                        android:id="@+id/secondDay"
+                        android:padding="@dimen/_3mdp"
+                        android:textColor="@color/gray"
+                        tools:text="sun, 14 jul"/>
+
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/chipStyle"
+                        android:id="@+id/thirdDay"
+                        android:layout_marginHorizontal="@dimen/_5mdp"
+                        android:padding="@dimen/_3mdp"
+                        android:textColor="@color/gray"
+                        tools:text="sun, 14 jul"/>
+
+                </com.google.android.material.chip.ChipGroup>
             </HorizontalScrollView>
             <!--Card main-->
             <androidx.cardview.widget.CardView
@@ -257,7 +290,7 @@
         android:layout_width="@dimen/_32mdp"
         android:layout_height="@dimen/_32mdp"
         android:indeterminateTint="@color/magentaHaze"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

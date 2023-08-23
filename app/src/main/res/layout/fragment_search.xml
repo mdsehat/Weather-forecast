@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/darker"
+    tools:context=".ui.search.SearchFragment">
+
+    <!--Search box-->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/searchLay"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_5mdp"
+        android:layout_marginTop="@dimen/_5mdp"
+        android:hint="@string/search_your_city"
+        android:textColorHint="@color/gray"
+        app:boxStrokeColor="@color/gray"
+        app:boxStrokeWidth="1dp"
+        app:endIconDrawable="@drawable/search_icon"
+        app:endIconMode="custom"
+        app:endIconTint="@color/gray"
+        app:hintTextColor="@color/gray"
+        app:layout_constraintTop_toTopOf="parent"
+        app:startIconDrawable="@drawable/close"
+        app:startIconTint="@color/gray">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/searchEdt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:maxLines="1"
+            android:textColor="@color/white" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!--List-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/citiesRv"
+        android:clipToPadding="false"
+        tools:listitem="@layout/item_city"
+        app:layout_constraintTop_toBottomOf="@id/searchLay"
+        android:layout_marginTop="@dimen/_10mdp"
+        android:paddingBottom="@dimen/_30mdp"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
