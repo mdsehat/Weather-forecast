@@ -2,7 +2,6 @@ package com.example.weatherforecast.ui.home.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -10,13 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherforecast.R
 import com.example.weatherforecast.data.model.ForecastResponse
 import com.example.weatherforecast.databinding.ItemForecast5DayBinding
-import com.example.weatherforecast.databinding.ItemForecastHourlyBinding
-import com.example.weatherforecast.utils.BaseDiffUtils
+import com.example.weatherforecast.utils.base.BaseDiffUtils
 import com.example.weatherforecast.utils.IconCode
 import com.example.weatherforecast.utils.convertTemp
 import com.example.weatherforecast.utils.convertUnixToTime
 import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 
 class Forecast5DaysAdapter @Inject constructor() : RecyclerView.Adapter<Forecast5DaysAdapter.Holder>() {

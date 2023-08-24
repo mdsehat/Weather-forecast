@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/darker">
+
+    <ImageView
+        android:layout_width="@dimen/_110mdp"
+        android:layout_height="@dimen/_110mdp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/ic_wifi_slash"
+        app:tint="@color/magentaHaze"
+        android:id="@+id/img"
+        android:contentDescription="@string/app_name" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/img"
+        app:layout_constraintStart_toStartOf="@id/img"
+        app:layout_constraintEnd_toEndOf="@id/img"
+        android:textColor="@color/magentaHaze"
+        android:layout_marginTop="@dimen/_10mdp"
+        android:textStyle="bold"
+        android:text="@string/check_your_connection"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

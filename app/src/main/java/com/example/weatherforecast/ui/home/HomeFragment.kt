@@ -7,9 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -24,11 +23,7 @@ import com.example.weatherforecast.utils.*
 import com.example.weatherforecast.view.home.HomeIntent
 import com.example.weatherforecast.view.home.HomeState
 import com.example.weatherforecast.view.home.HomeViewModel
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipDrawable
-import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -43,8 +38,6 @@ class HomeFragment : Fragment() {
     //Other
     private val viewModel: HomeViewModel by viewModels()
     private var myTimezone = 0
-    private val daysList = mutableListOf<String>()
-    private val TAG = "tagHome"
 
     @Inject
     lateinit var daysAdapter: ListOfDaysAdapter
@@ -55,12 +48,9 @@ class HomeFragment : Fragment() {
     @Inject
     lateinit var iconCode: IconCode
 
+    @Inject
+    lateinit var networkChecker: NetworkChecker
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        lifecycleScope.launch {
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,10 +65,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
-            //Call api
-            viewModel.intent.send(HomeIntent.GetCurrentAndForecastWeather(35.71, 51.40, API_KEY))
-            //Get list of days
-            viewModel.intent.send(HomeIntent.GetListOfDays)
             //Load state
             viewModel.state.collect { state ->
                 when (state) {
@@ -87,23 +73,38 @@ class HomeFragment : Fragment() {
                     }
                     is HomeState.Error -> {
                         hideLoading()
-                        Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
-                    }
-                    is HomeState.ListOfDays -> {
-                        initChipListOfDays(state.listOfDays)
+                        Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT)
+                            .show()
                     }
                     is HomeState.ShowCurrentAndForecastWeather -> {
                         hideLoading()
+                        initChipListOfDays(state.listOfDays)
                         setupData(state.pairInfo)
                         showForecast5Days(state.pairInfo.second)
                     }
                     else -> {}
                 }
-
+            }
+        }
+        //Call api
+        lifecycleScope.launch {
+            //Check network
+            networkChecker.checkingNetwork().collect {
+                if (it) {
+                    checkingNet(true)
+                    viewModel.intent.send(
+                        HomeIntent.GetCurrentAndForecastWeather(
+                            35.71,
+                            51.40,
+                            API_KEY
+                        )
+                    )
+                } else {
+                    checkingNet(false)
+                }
             }
         }
     }
-
 
 
     //--InitViews--//
@@ -270,9 +271,15 @@ class HomeFragment : Fragment() {
     //List of days
     private fun initChipListOfDays(list: MutableList<String>) {
         binding.apply {
-            firstDay.text = list[0]
-            secondDay.text = list[1]
-            thirdDay.text = list[2]
+            if (list.isNotEmpty()) {
+                chipGroup.visibility = View.VISIBLE
+                firstDay.text = list[0]
+                secondDay.text = list[1]
+                thirdDay.text = list[2]
+            } else {
+                chipGroup.visibility = View.INVISIBLE
+            }
+
         }
     }
 
@@ -288,6 +295,19 @@ class HomeFragment : Fragment() {
         binding.apply {
             contentLay.visibility = View.VISIBLE
             loading.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun checkingNet(connection: Boolean) {
+        binding.apply {
+            if (connection) {
+                contentLay.isVisible = true
+                checkNetLay.isVisible = false
+            } else {
+                contentLay.isVisible = false
+                checkNetLay.isVisible = true
+            }
+
         }
     }
 

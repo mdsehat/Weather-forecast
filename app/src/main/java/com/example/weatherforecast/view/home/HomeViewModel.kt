@@ -19,20 +19,17 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val repository: HomeRepository) : ViewModel() {
 
-    init {
-        handlingIntent()
-    }
-
     val intent = Channel<HomeIntent>()
     private val _state = MutableStateFlow<HomeState>(HomeState.Idle)
     val state: StateFlow<HomeState> get() = _state
 
+    init {
+        handlingIntent()
+    }
+
     private fun handlingIntent() = viewModelScope.launch {
         intent.consumeAsFlow().collect { homeIntent ->
             when (homeIntent) {
-                is HomeIntent.GetListOfDays -> {
-                    getListOfDays()
-                }
                 is HomeIntent.GetCurrentAndForecastWeather -> {
                     callCurrentAndForecastWeather(homeIntent.lat, homeIntent.lon, homeIntent.appId)
                 }
@@ -45,39 +42,29 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
         viewModelScope.launch {
             _state.value = HomeState.ShowLoading
             //Combine 2 api
-            val currentResponse = repository.remote.getCurrent(lat, lon, appId)
-            val forecastResponse = repository.remote.getForecast(lat, lon, appId)
-            combine(currentResponse, forecastResponse) { current: Response<CurrentResponse>,
-                                                         forecast: Response<ForecastResponse> ->
-                return@combine Pair(current,forecast)
-            }.catch {
-                _state.value = HomeState.Error(it.message!!)
-            }
-                .collect {
-                    if (it.first.isSuccessful) {
-                        _state.value = HomeState.ShowCurrentAndForecastWeather(
-                            Pair(it.first.body()!!, it.second.body()!!)
-                        )
-                    } else {
-                        _state.value = handlingErrorCode(it.first)
-                    }
+            try {
+                val currentResponse = repository.remote.getCurrent(lat, lon, appId)
+                val forecastResponse = repository.remote.getForecast(lat, lon, appId)
+                combine(currentResponse, forecastResponse) { current: Response<CurrentResponse>,
+                                                             forecast: Response<ForecastResponse> ->
+                    return@combine Pair(current,forecast)
+                }.catch {
+                    _state.value = HomeState.Error(it.message!!)
                 }
+                    .collect {
+                        if (it.first.isSuccessful) {
+                            _state.value = HomeState.ShowCurrentAndForecastWeather(
+                                Pair(it.first.body()!!, it.second.body()!!),
+                                repository.getListOfDays()
+                            )
+                        } else {
+                            _state.value = handlingErrorCode(it.first)
+                        }
+                    }
+            }catch (e: Exception){
+                _state.value = HomeState.Error("Error connection")
+            }
         }
-
-    //List of days
-    private fun getListOfDays() = viewModelScope.launch {
-        val listDays: MutableList<String> = mutableListOf()
-        val df = SimpleDateFormat("EEE, d MMM", Locale.getDefault())
-        val calenderCurrent = Calendar.getInstance()
-        listDays.add(df.format(calenderCurrent.time))
-        for (i in 1..2) {
-            calenderCurrent.add(Calendar.DATE, 1)
-            listDays.add(df.format(calenderCurrent.time))
-        }
-
-        _state.value = HomeState.ListOfDays(listDays)
-
-    }
 
     //Handling error code
     private fun <T> handlingErrorCode(response: Response<T>): HomeState {

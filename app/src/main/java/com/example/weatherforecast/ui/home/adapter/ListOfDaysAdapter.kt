@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherforecast.databinding.Item6daysBinding
-import com.example.weatherforecast.utils.BaseDiffUtils
+import com.example.weatherforecast.utils.base.BaseDiffUtils
 import javax.inject.Inject
 
 class ListOfDaysAdapter @Inject constructor() : RecyclerView.Adapter<ListOfDaysAdapter.Holder>() {

@@ -14,7 +14,7 @@
             android:id="@+id/contentLay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible">
+            android:visibility="invisible">
             <!--City-->
             <TextView
                 android:id="@+id/tvCity"
@@ -173,7 +173,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                tools:text="@string/wind"
+                                android:text="@string/wind"
                                 android:textColor="@color/gray"
                                 android:textSize="@dimen/_7font_mdp"
                                 app:drawableTopCompat="@drawable/wind" />
@@ -211,7 +211,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                tools:text="@string/humidity"
+                                android:text="@string/humidity"
                                 android:textColor="@color/gray"
                                 android:textSize="@dimen/_7font_mdp"
                                 app:drawableTopCompat="@drawable/humidity" />
@@ -249,7 +249,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                tools:text="@string/feels_like"
+                                android:text="@string/feels_like"
                                 android:textColor="@color/gray"
                                 android:textSize="@dimen/_7font_mdp"
                                 app:drawableTopCompat="@drawable/feels_like" />
@@ -290,9 +290,18 @@
         android:layout_width="@dimen/_32mdp"
         android:layout_height="@dimen/_32mdp"
         android:indeterminateTint="@color/magentaHaze"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!--Network checker-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:id="@+id/checkNetLay"
+        android:layout_height="match_parent">
+        <include layout="@layout/connection_error"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
