@@ -26,8 +26,16 @@ class SearchViewModel @Inject constructor(private val repository: SearchReposito
     private fun handleIntent() = viewModelScope.launch {
         intent.consumeAsFlow().collect{
             when(it){
-                is SearchIntent.Searching->{}
+                is SearchIntent.Searching->{
+                    getDataCities(it.search)
+                }
             }
+        }
+    }
+
+    private fun getDataCities(txt: String)= viewModelScope.launch {
+        repository.local.getDataCities(txt).collect{
+            _searchState.value = SearchState.ShowCities(it)
         }
     }
 

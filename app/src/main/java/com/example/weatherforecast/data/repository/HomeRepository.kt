@@ -1,14 +1,17 @@
 package com.example.weatherforecast.data.repository
 
 import android.util.Log
+import com.example.weatherforecast.data.source.LocalSource
 import com.example.weatherforecast.data.source.RemoteSource
 import com.example.weatherforecast.view.home.HomeState
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-class HomeRepository @Inject constructor(private val remoteSource: RemoteSource) {
+class HomeRepository @Inject constructor(private val remoteSource: RemoteSource,
+private val localSource: LocalSource) {
     val remote = remoteSource
+    val local = localSource
 
     fun getListOfDays() : MutableList<String> {
         val listDays: MutableList<String> = mutableListOf()

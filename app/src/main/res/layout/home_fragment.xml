@@ -10,6 +10,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/contentLay"
             android:layout_width="match_parent"
@@ -20,8 +21,8 @@
                 android:id="@+id/tvCity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_20mdp"
                 android:layout_marginStart="@dimen/_16mdp"
+                android:layout_marginTop="@dimen/_20mdp"
                 android:drawablePadding="@dimen/_5mdp"
                 android:textColor="@color/whiteSmoke"
                 android:textSize="@dimen/_18font_mdp"
@@ -44,6 +45,7 @@
                 android:id="@+id/tv5day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10mdp"
                 android:layout_marginEnd="@dimen/_16mdp"
                 android:drawablePadding="@dimen/_3mdp"
                 android:gravity="center_vertical"
@@ -52,61 +54,85 @@
                 android:textSize="@dimen/_11font_mdp"
                 app:drawableEndCompat="@drawable/arrow"
                 app:drawableTint="@color/gray"
-                android:layout_marginTop="@dimen/_10mdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvLastUpdate" />
             <!--Chip 5 day-->
             <HorizontalScrollView
                 android:id="@+id/scroll6days"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_14mdp"
                 android:clipToPadding="false"
                 android:scrollbars="none"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/tv5day">
 
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/chipGroup"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="@dimen/_16mdp"
-                    android:paddingEnd="@dimen/_20mdp"
-                    app:chipSpacing="0dp"
-                    app:selectionRequired="true"
-                    app:singleSelection="true"
-                    app:singleLine="true">
-
-                    <com.google.android.material.chip.Chip
+                    android:layout_height="match_parent">
+                    <!--Cache-->
+                    <TextView
+                        android:id="@+id/tvCache"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/chipStyle"
-                        android:id="@+id/firstDay"
-                        android:layout_marginHorizontal="@dimen/_5mdp"
-                        android:padding="@dimen/_3mdp"
-                        android:textColor="@color/gray"
-                        tools:text="sun, 14 jul"/>
+                        android:gravity="center"
+                        android:text="@string/the_device_is_offline"
+                        android:textColor="@color/magentaHaze"
+                        android:visibility="invisible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.google.android.material.chip.Chip
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroup"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/chipStyle"
-                        android:layout_marginHorizontal="@dimen/_5mdp"
-                        android:id="@+id/secondDay"
-                        android:padding="@dimen/_3mdp"
-                        android:textColor="@color/gray"
-                        tools:text="sun, 14 jul"/>
+                        android:paddingStart="@dimen/_16mdp"
+                        android:paddingEnd="@dimen/_20mdp"
+                        android:visibility="invisible"
+                        app:chipSpacing="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:selectionRequired="true"
+                        app:singleLine="true"
+                        app:singleSelection="true">
 
-                    <com.google.android.material.chip.Chip
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        style="@style/chipStyle"
-                        android:id="@+id/thirdDay"
-                        android:layout_marginHorizontal="@dimen/_5mdp"
-                        android:padding="@dimen/_3mdp"
-                        android:textColor="@color/gray"
-                        tools:text="sun, 14 jul"/>
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/firstDay"
+                            style="@style/chipStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/_5mdp"
+                            android:padding="@dimen/_3mdp"
+                            android:textColor="@color/gray"
+                            tools:text="sun, 14 jul" />
 
-                </com.google.android.material.chip.ChipGroup>
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/secondDay"
+                            style="@style/chipStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/_5mdp"
+                            android:padding="@dimen/_3mdp"
+                            android:textColor="@color/gray"
+                            tools:text="sun, 14 jul" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/thirdDay"
+                            style="@style/chipStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/_5mdp"
+                            android:padding="@dimen/_3mdp"
+                            android:textColor="@color/gray"
+                            tools:text="sun, 14 jul" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
             </HorizontalScrollView>
             <!--Card main-->
             <androidx.cardview.widget.CardView
@@ -131,13 +157,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_16mdp"
-                        tools:text="18"
                         android:textColor="@color/whiteSmoke"
                         android:textSize="@dimen/_52font_mdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toEndOf="@+id/animForecast"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="18" />
                     <!--Anim-->
                     <com.airbnb.lottie.LottieAnimationView
                         android:id="@+id/animForecast"
@@ -182,9 +208,9 @@
                                 android:id="@+id/tvWind"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                tools:text="15 Km/h"
                                 android:textColor="@color/whiteSmoke"
-                                android:textSize="@dimen/_10font_mdp" />
+                                android:textSize="@dimen/_10font_mdp"
+                                tools:text="15 Km/h" />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
                     <!--Humidity info-->
@@ -220,9 +246,9 @@
                                 android:id="@+id/tvHumidity"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                tools:text="24 %"
                                 android:textColor="@color/whiteSmoke"
-                                android:textSize="@dimen/_10font_mdp" />
+                                android:textSize="@dimen/_10font_mdp"
+                                tools:text="24 %" />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
                     <!--Feels like info-->
@@ -258,9 +284,9 @@
                                 android:id="@+id/tvFeelsLike"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                tools:text="99 "
                                 android:textColor="@color/whiteSmoke"
-                                android:textSize="@dimen/_10font_mdp" />
+                                android:textSize="@dimen/_10font_mdp"
+                                tools:text="99 " />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
@@ -296,12 +322,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!--Go to search page-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="@color/magentaHaze"
+        android:gravity="center"
+        android:id="@+id/tvGoToSearch"
+        android:visibility="gone"
+        android:textSize="@dimen/_12font_mdp"
+        android:text="@string/please_search_the_city_that_you_want"/>
+
     <!--Network checker-->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:visibility="gone"
         android:id="@+id/checkNetLay"
-        android:layout_height="match_parent">
-        <include layout="@layout/connection_error"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <include layout="@layout/connection_error" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

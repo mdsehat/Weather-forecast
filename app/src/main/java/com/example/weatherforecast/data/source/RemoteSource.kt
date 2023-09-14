@@ -5,11 +5,11 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class RemoteSource @Inject constructor(private val api: ApiServices) {
-    fun getCurrent(lat: Double, lon: Double, appId: String) = flow {
+    fun getCurrent(lat: Float, lon: Float, appId: String) = flow {
         emit(api.getCurrent(lat, lon, appId))
     }
 
-    fun getForecast(lat: Double, lon: Double, appId: String) = flow {
+    fun getForecast(lat: Float, lon: Float, appId: String) = flow {
         emit(api.getForecast(lat, lon, appId))
     }
 

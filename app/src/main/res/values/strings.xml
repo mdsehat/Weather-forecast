@@ -10,7 +10,10 @@
     <string name="feels_like">Feels like</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="today_and_4_next">Today and next 4 days</string>
+    <string name="next_days_forecast">Next days forecast</string>
     <string name="search_your_city">Search your city</string>
     <string name="check_your_connection">Check your connection!</string>
+    <string name="get_your_location">Get your location</string>
+    <string name="the_device_is_offline">The device is offline!</string>
+    <string name="please_search_the_city_that_you_want">Please search the city that you want!</string>
 </resources>

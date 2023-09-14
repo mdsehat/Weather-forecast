@@ -1,17 +1,16 @@
 package com.example.weatherforecast.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.weatherforecast.R
 import com.example.weatherforecast.databinding.ActivityMainBinding
-import com.example.weatherforecast.databinding.HomeFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity: AppCompatActivity() {
     //Binding
     private var _binding : ActivityMainBinding?= null
     private val binding get() = _binding

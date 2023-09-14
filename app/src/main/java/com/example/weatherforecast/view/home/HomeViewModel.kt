@@ -2,7 +2,9 @@ package com.example.weatherforecast.view.home
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.weatherforecast.data.database.CurrentAndForecastEntity
 import com.example.weatherforecast.data.model.CurrentResponse
 import com.example.weatherforecast.data.model.ForecastResponse
 import com.example.weatherforecast.data.repository.HomeRepository
@@ -33,12 +35,18 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
                 is HomeIntent.GetCurrentAndForecastWeather -> {
                     callCurrentAndForecastWeather(homeIntent.lat, homeIntent.lon, homeIntent.appId)
                 }
+                is HomeIntent.ReadFromCache ->{
+                    readFromCache()
+                }
+                is HomeIntent.CheckCacheAvailable ->{
+                    checkConnection()
+                }
             }
         }
     }
 
     //Current and forecast
-    private fun callCurrentAndForecastWeather(lat: Double, lon: Double, appId: String) =
+    private fun callCurrentAndForecastWeather(lat: Float, lon: Float, appId: String) =
         viewModelScope.launch {
             _state.value = HomeState.ShowLoading
             //Combine 2 api
@@ -57,6 +65,8 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
                                 Pair(it.first.body()!!, it.second.body()!!),
                                 repository.getListOfDays()
                             )
+                            //Caching
+                            saveCache(it.first.body()!!, it.second.body()!!)
                         } else {
                             _state.value = handlingErrorCode(it.first)
                         }
@@ -66,6 +76,26 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
             }
         }
 
+    //Caching
+    private fun saveEntity(entity: CurrentAndForecastEntity) = viewModelScope.launch{
+        repository.local.insertToCache(entity)
+    }
+
+    private fun readFromCache() = viewModelScope.launch {
+        repository.local.getDataFromCache().collect{
+            _state.value = HomeState.ShowFromCache(it)
+        }
+    }
+    private fun saveCache(current: CurrentResponse, forecast: ForecastResponse){
+        val entity = CurrentAndForecastEntity(0,current, forecast)
+        saveEntity(entity)
+    }
+
+    private fun checkConnection() = viewModelScope.launch {
+        repository.local.isEmpty().collect{
+            _state.value = HomeState.ShowCheckCacheAvailable(it)
+        }
+    }
     //Handling error code
     private fun <T> handlingErrorCode(response: Response<T>): HomeState {
         return when (response.code()) {

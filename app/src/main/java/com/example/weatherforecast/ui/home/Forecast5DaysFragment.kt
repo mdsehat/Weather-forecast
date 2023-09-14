@@ -73,6 +73,7 @@ class Forecast5DaysFragment : Fragment() {
                 calender.add(Calendar.DATE, 1)
             }
             val time = df.format(calender.time)
+
             item.list?.let { listHour ->
                 listHour.forEach { items ->
                     val requestTime = convertUnixToTime(items!!.dt!!.toLong(), item.city?.timezone!!, df)
@@ -82,7 +83,9 @@ class Forecast5DaysFragment : Fragment() {
                     }
                 }
             }
-            list.add(internalList[counter/2])
+            if (counter != 0){
+                list.add(internalList[counter/2])
+            }
         }
         forecastAdapter.setData(list, item.city?.timezone!!)
     }

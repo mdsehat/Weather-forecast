@@ -35,6 +35,24 @@
             android:textColor="@color/white" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!--Location-->
+    <TextView
+        android:id="@+id/tvLocation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/searchLay"
+        app:layout_constraintStart_toStartOf="@id/searchLay"
+        app:layout_constraintEnd_toEndOf="@id/searchLay"
+        app:drawableStartCompat="@drawable/ic_location_on_24"
+        android:paddingVertical="@dimen/_16mdp"
+        android:paddingHorizontal="@dimen/_8mdp"
+        android:background="@drawable/bg_rounded_location"
+        android:gravity="center_vertical"
+        android:text="@string/get_your_location"
+        android:drawablePadding="@dimen/_16mdp"
+        android:textColor="@color/white"
+        />
+
     <!--List-->
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="0dp"
@@ -43,10 +61,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:id="@+id/citiesRv"
         android:clipToPadding="false"
+        android:visibility="gone"
         tools:listitem="@layout/item_city"
-        app:layout_constraintTop_toBottomOf="@id/searchLay"
+        app:layout_constraintTop_toBottomOf="@id/tvLocation"
         android:layout_marginTop="@dimen/_10mdp"
         android:paddingBottom="@dimen/_30mdp"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

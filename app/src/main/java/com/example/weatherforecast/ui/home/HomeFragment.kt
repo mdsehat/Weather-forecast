@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherforecast.R
 import com.example.weatherforecast.data.model.CurrentResponse
@@ -24,6 +25,8 @@ import com.example.weatherforecast.view.home.HomeIntent
 import com.example.weatherforecast.view.home.HomeState
 import com.example.weatherforecast.view.home.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -44,6 +47,9 @@ class HomeFragment : Fragment() {
 
     @Inject
     lateinit var forecastAdapter: ForecastWeatherAdapter
+
+    @Inject
+    lateinit var storedCity: StoredCity
 
     @Inject
     lateinit var iconCode: IconCode
@@ -82,25 +88,50 @@ class HomeFragment : Fragment() {
                         setupData(state.pairInfo)
                         showForecast5Days(state.pairInfo.second)
                     }
+                    is HomeState.ShowFromCache -> {
+                        hideLoading()
+                        setDataFromCache(Pair(state.entity.current!!, state.entity.forecast!!))
+                        showForecast5Days(state.entity.forecast!!)
+                    }
+                    is HomeState.ShowCheckCacheAvailable -> {
+                        showCheckCacheAvailable(state.isEmpty)
+                    }
                     else -> {}
                 }
             }
         }
         //Call api
         lifecycleScope.launch {
-            //Check network
-            networkChecker.checkingNetwork().collect {
-                if (it) {
-                    checkingNet(true)
-                    viewModel.intent.send(
-                        HomeIntent.GetCurrentAndForecastWeather(
-                            35.71,
-                            51.40,
-                            API_KEY
-                        )
-                    )
-                } else {
-                    checkingNet(false)
+            storedCity.getData.collect { cityData ->
+                if (cityData != null) {
+                    binding.tvGoToSearch.isVisible = false
+                    networkChecker.checkingNetwork().collect { state ->
+                        if (state) {
+                            checkingNet(true)
+                            //Show list of days
+                            stateDevice(false)
+                            //Call combine current and forecast weather
+                            viewModel.intent.send(
+                                HomeIntent.GetCurrentAndForecastWeather(
+                                    cityData.lat.toFloat(),
+                                    cityData.lon.toFloat(),
+                                    API_KEY
+                                )
+                            )
+                        } else {
+                            //Not show list of days
+                            stateDevice(true)
+                            viewModel.intent.send(HomeIntent.CheckCacheAvailable)
+                        }
+                    }
+                }else{
+                    //Go to search page
+                    binding.apply {
+                        tvGoToSearch.isVisible = true
+                        contentLay.visibility = View.INVISIBLE
+                        loading.visibility = View.INVISIBLE
+                    }
+
                 }
             }
         }
@@ -125,8 +156,10 @@ class HomeFragment : Fragment() {
                 initListForecast(3, itemCurrent = item.first, itemForecast = item.second)
             }
         }
+    }
 
-
+    private fun setDataFromCache(item: Pair<CurrentResponse, ForecastResponse>) {
+        initListForecast(1, itemCurrent = item.first, itemForecast = item.second)
     }
 
     private fun showForecast5Days(itemForecast5Days: ForecastResponse) {
@@ -168,7 +201,7 @@ class HomeFragment : Fragment() {
                 }
             }
             //Last updated
-            val df = SimpleDateFormat("EEE MM MMMM HH:mm")
+            val df = SimpleDateFormat("EEE dd MMMM HH:mm")
             tvLastUpdate.text = convertUnixToTime(response.dt!!.toLong(), response.timezone!!, df)
             //timezone
             myTimezone = response.timezone
@@ -308,6 +341,29 @@ class HomeFragment : Fragment() {
                 checkNetLay.isVisible = true
             }
 
+        }
+    }
+
+    private fun stateDevice(offLine: Boolean) {
+        binding.apply {
+            if (offLine) {
+                chipGroup.visibility = View.INVISIBLE
+                tvCache.visibility = View.VISIBLE
+            } else {
+                chipGroup.visibility = View.VISIBLE
+                tvCache.visibility = View.INVISIBLE
+            }
+        }
+    }
+
+    private fun showCheckCacheAvailable(isEmpty: Boolean) {
+        Log.e("tagHo", "showCheckCacheAvailable: " + isEmpty)
+        if (isEmpty) {
+            checkingNet(false)
+        } else {
+            lifecycleScope.launch {
+                viewModel.intent.send(HomeIntent.ReadFromCache)
+            }
         }
     }
 
